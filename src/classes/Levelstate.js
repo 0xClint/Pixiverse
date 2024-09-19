@@ -1,10 +1,18 @@
-import { LEVEL_THEMES } from "@/helpers/consts";
+import {
+  LEVEL_THEMES,
+  PLACEMENT_TYPE_GOAL,
+  PLACEMENT_TYPE_HERO,
+} from "@/helpers/consts";
 import { TILES } from "@/helpers/tiles";
+import { placementFactory } from "./PlacementFactory";
+import { GameLoop } from "./GameLoop";
+import { DirectionControls } from "./DirectionControls";
 
 export class LevelState {
   constructor(levelId, onEmit) {
     this.id = levelId;
     this.onEmit = onEmit;
+    this.directionControls = new DirectionControls();
 
     //Start the level
     this.start();
@@ -12,47 +20,54 @@ export class LevelState {
 
   start() {
     this.theme = LEVEL_THEMES.BLUE;
-    this.tilesWidth = 9;
-    this.tilesHeight = 9;
+    this.tilesWidth = 8;
+    this.tilesHeight = 8;
     this.placements = [
       {
         id: 0,
-        x: 0,
-        y: 0,
-        frameCoord: TILES.ICE_PICKUP,
+        x: 2,
+        y: 2,
+        type: PLACEMENT_TYPE_HERO,
       },
       {
         id: 1,
-        x: 1,
-        y: 1,
-        frameCoord: TILES.BULLET_DROPBOX,
+        x: 6,
+        y: 4,
+        type: PLACEMENT_TYPE_GOAL,
       },
-      {
-        id: 2,
-        x: 2,
-        y: 2,
-        frameCoord: TILES.CLOCK,
-      },
-      {
-        id: 3,
-        x: 3,
-        y: 3,
-        frameCoord: TILES.FIRE_PICKUP,
-      },
-    ];
+    ].map((config) => {
+      return placementFactory.createPlacement(config, this);
+    });
 
-    setTimeout(() => {
-      this.placements = [
-        ...this.placements,
-        {
-          id: 6,
-          x: 4,
-          y: 2,
-          frameCoord: TILES.FIRE_PICKUP,
-        },
-      ];
-      this.onEmit(this.getState());
-    }, 1000);
+    //Cache a reference to the Hero
+    this.heroRef = this.placements.find((p) => p.type == PLACEMENT_TYPE_HERO);
+    this.startGameLoop();
+  }
+
+  startGameLoop() {
+    this.gameLoop?.stop();
+    this.gameLoop = new GameLoop(() => {
+      this.tick();
+    });
+  }
+
+  tick() {
+    //Check for movement here
+    if (this.directionControls.direction) {
+      this.heroRef.controllerMoveRequested(this.directionControls.direction);
+    }
+
+    //Call tick on any placement that wants to update
+    this.placements.forEach((placement) => {
+      placement.tick();
+    });
+
+    // Emit any changes in React
+    this.onEmit(this.getState());
+  }
+
+  isPositionOutOfBounds(x, y) {
+    return x == 0 || y == 0 || x > this.tilesWidth || y > this.tilesHeight;
   }
 
   getState() {
@@ -61,19 +76,12 @@ export class LevelState {
       tilesWidth: this.tilesWidth,
       tilesHeight: this.tilesHeight,
       placements: this.placements,
-      //   deathOutcome: this.deathOutcome,
-      //   isCompleted: this.isCompleted,
-      //   cameraTransformX: this.camera.transformX,
-      //   cameraTransformY: this.camera.transformY,
-      //   secondsRemaining: this.clock.secondsRemaining,
-      //   inventory: this.inventory,
-      //   restart: () => {
-      //     this.start();
-      //   },
     };
   }
 
   destroy() {
     //Tear down the level
+    this.gameLoop.stop();
+    this.directionControls.unbind();
   }
 }

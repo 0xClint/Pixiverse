@@ -30,6 +30,6 @@ canvas {
 
 @media (min-width: 360px) {
   :root {
-    --pixel-size: 2;
+    --pixel-size: 3;
   }
 }

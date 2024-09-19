@@ -1,19 +1,15 @@
-import Sprite from "@/components/object-graphics/Sprite";
-import { CELL_SIZE } from "@/helpers/consts";
-
 export default function LevelPlacementsLayer({ level }) {
   return level.placements.map((placement) => {
     //Wrap each Sprite in a positioned div
-    const x = placement.x * CELL_SIZE + "px";
-    const y = placement.y * CELL_SIZE + "px";
+    const [x, y] = placement.displayXY();
     const style = {
       position: "absolute",
-      transform: `translate3d(${x},${y},0)`,
+      transform: `translate3d(${x}px,${y}px,0)`,
     };
 
     return (
       <div key={placement.id} style={style}>
-        <Sprite frameCoord={placement.frameCoord} />
+        {placement.renderComponent()}
       </div>
     );
   });
