@@ -22,6 +22,14 @@ export class Placement {
 
   tick() {}
 
+  isSolidForBody(_body) {
+    return false;
+  }
+
+  addsItemToInventoryOnColide() {
+    return null;
+  }
+
   displayXY() {
     if (this.movingPixelsRemaining > 0) {
       return this.displayMovingXY();
@@ -48,6 +56,9 @@ export class Placement {
     }
   }
 
+  zIndex() {
+    return 1;
+  }
   renderComponent() {
     return null;
   }

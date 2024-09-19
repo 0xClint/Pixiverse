@@ -5,10 +5,12 @@ import {
   directionUpdateMap,
   HERO_RUN_1,
   HERO_RUN_2,
+  Z_INDEX_LAYER_SIZE,
 } from "@/helpers/consts";
 import { Placement } from "./Placement";
 import Hero from "@/components/object-graphics/Hero";
 import { TILES } from "@/helpers/tiles";
+import { Collision } from "@/classes/Collision";
 
 const heroSkinMap = {
   [BODY_SKINS.NORMAL]: [TILES.HERO_LEFT, TILES.HERO_RIGHT],
@@ -46,13 +48,19 @@ export class HeroPlacement extends Placement {
   canMoveToNextDestination(direction) {
     //next space bound?
     const { x, y } = directionUpdateMap[direction];
-    const isOutOfBounds = this.level.isPositionOutOfBounds(
-      this.x + x,
-      this.y + y
-    );
+
+    const nextX = this.x + x;
+    const nextY = this.y + y;
+    const isOutOfBounds = this.level.isPositionOutOfBounds(nextX, nextY);
     if (isOutOfBounds) return false;
 
     //Is there a solid thing?
+    const collision = new Collision(this, this.level, { x: nextX, y: nextY });
+
+    if (collision.withSolidPlacement()) {
+      return false;
+    }
+
     return true;
   }
 
@@ -90,8 +98,16 @@ export class HeroPlacement extends Placement {
     const { x, y } = directionUpdateMap[this.movingPixelDirection];
     this.x += x;
     this.y += y;
+    this.handleCollision();
   }
 
+  handleCollision() {
+    const collision = new Collision(this, this.level);
+    const collideThatAddsToInventory = collision.withPlacementAddsToInventory();
+    if (collideThatAddsToInventory) {
+      console.log("Handle Collision!", collideThatAddsToInventory);
+    }
+  }
   getFrame() {
     //left/right frame to show
     const index = this.spritFacingDirection === DIRECTION_LEFT ? 0 : 1;
@@ -120,6 +136,10 @@ export class HeroPlacement extends Placement {
       return -1;
     }
     return -2;
+  }
+
+  zIndex() {
+    return this.y * Z_INDEX_LAYER_SIZE + 1;
   }
   renderComponent() {
     return (

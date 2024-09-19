@@ -1,8 +1,13 @@
+import { FlourPlacement } from "@/game-objects/FlourPlacement";
+import { WallPlacement } from "@/game-objects/WallPlacement";
+
 const { GoalPlacement } = require("@/game-objects/GoalPlacement");
 const { HeroPlacement } = require("@/game-objects/HeroPlacement");
 const {
   PLACEMENT_TYPE_HERO,
   PLACEMENT_TYPE_GOAL,
+  PLACEMENT_TYPE_WALL,
+  PLACEMENT_TYPE_FLOUR,
 } = require("@/helpers/consts");
 
 class PlacementFactory {
@@ -17,6 +22,10 @@ class PlacementFactory {
         return new HeroPlacement(config, level);
       case PLACEMENT_TYPE_GOAL:
         return new GoalPlacement(config, level);
+      case PLACEMENT_TYPE_WALL:
+        return new WallPlacement(config, level);
+      case PLACEMENT_TYPE_FLOUR:
+        return new FlourPlacement(config, level);
       default:
         console.warn("NO TYPE FOUND", config.type);
         return null;
