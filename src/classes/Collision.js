@@ -21,8 +21,20 @@ export class Collision {
   }
 
   withPlacementAddsToInventory() {
-    return this.placementsAtPosition.find((p) =>
-      p.addsItemToInventoryOnColide(this.forBody)
-    );
+    return this.placementsAtPosition.find((p) => {
+      return !p.hasBeenCollected && p.addsItemToInventoryOnColide(this.forBody);
+    });
+  }
+
+  withCompletesLevel() {
+    return this.placementsAtPosition.find((p) => {
+      return p.completesLevelOnCollide();
+    });
+  }
+
+  withLock() {
+    return this.placementsAtPosition.find((p) => {
+      return p.canBeUnlocked();
+    });
   }
 }

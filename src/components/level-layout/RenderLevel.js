@@ -1,27 +1,33 @@
-import { LEVEL_THEMES, THEME_BACKGROUNDS } from "@/helpers/consts";
+import { THEME_BACKGROUNDS } from "@/helpers/consts";
 import styles from "./RenderLevel.module.css";
 import LevelBackgroundTilesLayer from "./LevelBackgroundTilesLayer";
 import LevelPlacementsLayer from "./LevelPlacementsLayer";
 import { useEffect, useState } from "react";
 import { LevelState } from "@/classes/Levelstate";
+import FlourCount from "../hud/FlourCount";
+import LevelCompleteMessage from "../hud/LevelCompleteMessage";
+import { useRecoilValue } from "recoil";
+import { currentLevelIdAtom } from "@/atoms/currentLevelIdAtom";
 
 export default function RenderLevel() {
   const [level, setLevel] = useState(null);
+  const currentLevelId = useRecoilValue(currentLevelIdAtom);
+
 
   useEffect(() => {
     //Create and subscribe to state change
-    const levelState = new LevelState("1-1", (newState) => {
+    const levelState = new LevelState(currentLevelId, (newState) => {
       setLevel(newState);
     });
 
     //Get initial state
     setLevel(levelState.getState());
-  
+
     //Destroy method when this component unmounts or cleanup
     return () => {
       levelState.destroy();
     };
-  }, []);
+  }, [currentLevelId]);
 
   if (!level) return null;
 
@@ -36,6 +42,8 @@ export default function RenderLevel() {
         <LevelBackgroundTilesLayer level={level} />
         <LevelPlacementsLayer level={level} />
       </div>
+      <FlourCount level={level} />
+      {level.isCompleted && <LevelCompleteMessage />}
     </div>
   );
 }

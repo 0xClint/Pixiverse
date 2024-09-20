@@ -5,6 +5,7 @@ import {
   directionUpdateMap,
   HERO_RUN_1,
   HERO_RUN_2,
+  PLACEMENT_TYPE_CELEBRATION,
   Z_INDEX_LAYER_SIZE,
 } from "@/helpers/consts";
 import { Placement } from "./Placement";
@@ -32,9 +33,16 @@ export class HeroPlacement extends Placement {
       return;
     }
 
+    //Check for a Lock at next Position
+
+    const possibleLock = this.getLockAtNextPosition(direction);
+    if (possibleLock) {
+      possibleLock.unlock();
+      return;
+    }
+
     //Make sure the next space is available
-    const canMove = this.canMoveToNextDestination(direction);
-    if (!canMove) {
+    if (this.isSolidAtNextPosition(direction)) {
       return;
     }
 
@@ -45,23 +53,27 @@ export class HeroPlacement extends Placement {
     this.updateWalkFrame();
   }
 
-  canMoveToNextDestination(direction) {
-    //next space bound?
+  getCollisionAtNextPosition(direction) {
     const { x, y } = directionUpdateMap[direction];
-
     const nextX = this.x + x;
     const nextY = this.y + y;
-    const isOutOfBounds = this.level.isPositionOutOfBounds(nextX, nextY);
-    if (isOutOfBounds) return false;
+    return new Collision(this, this.level, { x: nextX, y: nextY });
+  }
 
-    //Is there a solid thing?
-    const collision = new Collision(this, this.level, { x: nextX, y: nextY });
+  getLockAtNextPosition(direction) {
+    const collision = this.getCollisionAtNextPosition(direction);
 
-    if (collision.withSolidPlacement()) {
-      return false;
-    }
+    return collision.withLock();
+  }
 
-    return true;
+  isSolidAtNextPosition(direction) {
+    const collision = this.getCollisionAtNextPosition(direction);
+    const isOutOfBounds = this.level.isPositionOutOfBounds(
+      collision.x,
+      collision.y
+    );
+    if (isOutOfBounds) return true;
+    return Boolean(collision.withSolidPlacement());
   }
 
   updateFacingDirection() {
@@ -105,7 +117,17 @@ export class HeroPlacement extends Placement {
     const collision = new Collision(this, this.level);
     const collideThatAddsToInventory = collision.withPlacementAddsToInventory();
     if (collideThatAddsToInventory) {
-      console.log("Handle Collision!", collideThatAddsToInventory);
+      collideThatAddsToInventory.collect();
+      this.level.addPlacement({
+        type: PLACEMENT_TYPE_CELEBRATION,
+        x: this.x,
+        y: this.y,
+      });
+    }
+
+    const completesLevel = collision.withCompletesLevel();
+    if (completesLevel) {
+      this.level.completeLevel();
     }
   }
   getFrame() {

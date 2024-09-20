@@ -29,6 +29,9 @@ export class Placement {
   addsItemToInventoryOnColide() {
     return null;
   }
+  completesLevelOnCollide() {
+    return false;
+  }
 
   displayXY() {
     if (this.movingPixelsRemaining > 0) {
@@ -56,9 +59,19 @@ export class Placement {
     }
   }
 
+  collect() {
+    this.hasBeenCollected = true;
+    this.level.inventory.add(this.addsItemToInventoryOnColide());
+  }
+
+  canBeUnlocked() {
+    return false;
+  }
+
   zIndex() {
     return 1;
   }
+
   renderComponent() {
     return null;
   }
