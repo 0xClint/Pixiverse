@@ -17,7 +17,7 @@ const heroSkinMap = {
   [BODY_SKINS.NORMAL]: [TILES.HERO_LEFT, TILES.HERO_RIGHT],
   // [BODY_SKINS.WATER]: [TILES.HERO_WATER_LEFT, TILES.HERO_WATER_RIGHT],
   // [BODY_SKINS.FIRE]: [TILES.HERO_FIRE_LEFT, TILES.HERO_FIRE_RIGHT],
-  // [BODY_SKINS.DEATH]: [TILES.HERO_DEATH_LEFT, TILES.HERO_DEATH_RIGHT],
+  [BODY_SKINS.DEATH]: [TILES.HERO_DEATH_LEFT, TILES.HERO_DEATH_RIGHT],
   // [BODY_SKINS.SCARED]: [TILES.HERO_DEATH_LEFT, TILES.HERO_DEATH_RIGHT],
   // [BODY_SKINS.ICE]: [TILES.HERO_ICE_LEFT, TILES.HERO_ICE_RIGHT],
   // [BODY_SKINS.CONVEYOR]: [TILES.HERO_CONVEYOR_LEFT, TILES.HERO_CONVEYOR_RIGHT],
@@ -125,6 +125,10 @@ export class HeroPlacement extends Placement {
       });
     }
 
+    const takesDamages = collision.withSelfGetsDamaged();
+    if (takesDamages) {
+      this.level.setDeathOutcome(takesDamages.type);
+    }
     const completesLevel = collision.withCompletesLevel();
     if (completesLevel) {
       this.level.completeLevel();
@@ -133,6 +137,11 @@ export class HeroPlacement extends Placement {
   getFrame() {
     //left/right frame to show
     const index = this.spritFacingDirection === DIRECTION_LEFT ? 0 : 1;
+
+    //If dead show dead skin
+    if (this.level.deathOutcome) {
+      return heroSkinMap[BODY_SKINS.DEATH][index];
+    }
 
     //Correct walking frame per direction
     if (this.movingPixelsRemaining > 0) {

@@ -37,4 +37,10 @@ export class Collision {
       return p.canBeUnlocked();
     });
   }
+
+  withSelfGetsDamaged() {
+    return this.placementsAtPosition.find((p) => {
+      return p.damagesBodyOnCollide(this.forBody);
+    });
+  }
 }

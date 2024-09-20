@@ -5,6 +5,7 @@ import { HeroPlacement } from "@/game-objects/HeroPlacement";
 import { KeyPlacement } from "@/game-objects/KeyPlacement";
 import { LockPlacement } from "@/game-objects/LockPlacement";
 import { WallPlacement } from "@/game-objects/WallPlacement";
+import { WaterPlacement } from "@/game-objects/WaterPlacement";
 import {
   PLACEMENT_TYPE_HERO,
   PLACEMENT_TYPE_WALL,
@@ -13,6 +14,7 @@ import {
   PLACEMENT_TYPE_GOAL,
   PLACEMENT_TYPE_KEY,
   PLACEMENT_TYPE_LOCK,
+  PLACEMENT_TYPE_WATER,
 } from "@/helpers/consts";
 
 const placementTypeClassMap = {
@@ -23,7 +25,7 @@ const placementTypeClassMap = {
   [PLACEMENT_TYPE_CELEBRATION]: CelebrationPlacement,
   [PLACEMENT_TYPE_LOCK]: LockPlacement,
   [PLACEMENT_TYPE_KEY]: KeyPlacement,
-  // [PLACEMENT_TYPE_WATER]: WaterPlacement,
+  [PLACEMENT_TYPE_WATER]: WaterPlacement,
   // [PLACEMENT_TYPE_WATER_PICKUP]: WaterPickupPlacement,
   // [PLACEMENT_TYPE_GROUND_ENEMY]: GroundEnemyPlacement,
   // [PLACEMENT_TYPE_FLYING_ENEMY]: FlyingEnemyPlacement,

@@ -6,6 +6,7 @@ import {
   PLACEMENT_TYPE_KEY,
   PLACEMENT_TYPE_LOCK,
   PLACEMENT_TYPE_WALL,
+  PLACEMENT_TYPE_WATER,
 } from "@/helpers/consts";
 
 const level = {
@@ -24,14 +25,19 @@ const level = {
       type: PLACEMENT_TYPE_GOAL,
     },
     {
-      x: 4,
+      x: 3,
       y: 4,
-      type: PLACEMENT_TYPE_WALL,
+      type: PLACEMENT_TYPE_WATER,
     },
     {
-      x: 5,
-      y: 2,
-      type: PLACEMENT_TYPE_WALL,
+      x: 4,
+      y: 5,
+      type: PLACEMENT_TYPE_WATER,
+    },
+    {
+      x: 3,
+      y: 5,
+      type: PLACEMENT_TYPE_WATER,
     },
     {
       x: 6,
