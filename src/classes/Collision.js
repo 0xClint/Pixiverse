@@ -1,3 +1,5 @@
+import { PLACEMENT_TYPE_ICE } from "@/helpers/consts";
+
 export class Collision {
   constructor(forBody, level, position = null) {
     this.forBody = forBody;
@@ -21,15 +23,23 @@ export class Collision {
   }
 
   withPlacementAddsToInventory() {
-    return this.placementsAtPosition.find((p) => {
-      return !p.hasBeenCollected && p.addsItemToInventoryOnColide(this.forBody);
-    });
+    if (this.forBody.canCollectItems) {
+      return this.placementsAtPosition.find((p) => {
+        return (
+          !p.hasBeenCollected && p.addsItemToInventoryOnColide(this.forBody)
+        );
+      });
+    }
+    return null;
   }
 
   withCompletesLevel() {
-    return this.placementsAtPosition.find((p) => {
-      return p.completesLevelOnCollide();
-    });
+    if (this.forBody.canCompleteLevel) {
+      return this.placementsAtPosition.find((p) => {
+        return p.completesLevelOnCollide();
+      });
+    }
+    return null;
   }
 
   withLock() {
@@ -41,6 +51,47 @@ export class Collision {
   withSelfGetsDamaged() {
     return this.placementsAtPosition.find((p) => {
       return p.damagesBodyOnCollide(this.forBody);
+    });
+  }
+
+  wtihChangesHeroSkin() {
+    return this.placementsAtPosition.find((p) => {
+      return p.changesHeroSkinOnCollide();
+    });
+  }
+
+  withPlacementMovesBody() {
+    if (this.forBody.interactsWithGround) {
+      return this.placementsAtPosition.find((p) => {
+        return p.autoMovesBodyOnCollide(this.forBody);
+      });
+    }
+
+    return null;
+  }
+
+  withIceCorner() {
+    return this.placementsAtPosition.find((p) => {
+      return p.type === PLACEMENT_TYPE_ICE && p.corner;
+    });
+  }
+
+  withDoorSwitch() {
+    return this.placementsAtPosition.find((p) => {
+      return p.switchesDoorsOnCollide(this.forBody);
+    });
+  }
+
+  withTeleport() {
+    return this.placementsAtPosition.find((p) => {
+      const teleportPos = p.teleportsToPositionOnCollide(this.forBody);
+      return Boolean(teleportPos);
+    });
+  }
+
+  withStealsInventory() {
+    return this.placementsAtPosition.find((p) => {
+      return p.stealsInventoryOnCollide(this.forBody);
     });
   }
 }

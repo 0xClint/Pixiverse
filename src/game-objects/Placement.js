@@ -1,4 +1,5 @@
 import {
+  BODY_SKINS,
   CELL_SIZE,
   DIRECTION_LEFT,
   DIRECTION_RIGHT,
@@ -13,20 +14,48 @@ export class Placement {
     this.y = properties.y;
     this.level = level;
 
+    this.skin = BODY_SKINS.NORMAL;
     this.travelPixelsPerFrame = 1.5;
     this.movingPixelsRemaining = 0;
     this.movingPixelDirection = DIRECTION_RIGHT;
     this.spritFacingDirection = DIRECTION_RIGHT;
     this.spriteWalkFrame = 0;
+
+    this.hasBeenCollected = false;
+    this.canBeStolen = true;
   }
 
   tick() {}
+
+  tickAttemptAiMove() {
+    return null;
+  }
 
   isSolidForBody(_body) {
     return false;
   }
 
   addsItemToInventoryOnColide() {
+    return null;
+  }
+
+  autoMovesBodyOnCollide() {
+    return false;
+  }
+
+  changesHeroSkinOnCollide() {
+    return null;
+  }
+
+  switchesDoorsOnCollide() {
+    return null;
+  }
+
+  teleportsToPositionOnCollide() {
+    return null;
+  }
+
+  stealsInventoryOnCollide() {
     return null;
   }
 
@@ -67,6 +96,12 @@ export class Placement {
   collect() {
     this.hasBeenCollected = true;
     this.level.inventory.add(this.addsItemToInventoryOnColide());
+  }
+
+  resetHasBeenCollected() {
+    if (this.canBeStolen && this.hasBeenCollected) {
+      this.hasBeenCollected = false;
+    }
   }
 
   canBeUnlocked() {

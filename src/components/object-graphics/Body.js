@@ -2,12 +2,10 @@ import { TILES } from "@/helpers/tiles";
 import Sprite from "./Sprite";
 import styles from "./Hero.module.css";
 
-export default function Hero({ frameCoord, yTranslate }) {
+export default function Body({ frameCoord, yTranslate, showShadow }) {
   return (
     <div className={styles.hero}>
-      <div>
-        <Sprite frameCoord={TILES.SHADOW} />
-      </div>
+      <div>{showShadow && <Sprite frameCoord={TILES.SHADOW} />}</div>
       <div
         className={styles.heroBody}
         style={{

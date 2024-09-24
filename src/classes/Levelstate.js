@@ -4,6 +4,8 @@ import { GameLoop } from "./GameLoop";
 import { DirectionControls } from "./DirectionControls";
 import Levels from "@/Levels/LevelsMap";
 import { Inventory } from "./Inventory";
+import { LevelAnimatedFrames } from "./LevelAnimatedFrames";
+import { Camera } from "./Camera";
 
 export class LevelState {
   constructor(levelId, onEmit) {
@@ -31,8 +33,15 @@ export class LevelState {
     //Fresh Inventory
     this.inventory = new Inventory();
 
+    //Create fram animation manager
+    this.animatedFrames = new LevelAnimatedFrames();
+
     //Cache a reference to the Hero
     this.heroRef = this.placements.find((p) => p.type == PLACEMENT_TYPE_HERO);
+
+    //Create a Camera
+    this.camera = new Camera(this);
+
     this.startGameLoop();
   }
 
@@ -64,12 +73,33 @@ export class LevelState {
       placement.tick();
     });
 
+    //Work on animation frames
+    this.animatedFrames.tick();
+
+    //Update the camera
+    this.camera.tick();
+
     // Emit any changes in React
     this.onEmit(this.getState());
   }
 
   isPositionOutOfBounds(x, y) {
     return x == 0 || y == 0 || x > this.tilesWidth || y > this.tilesHeight;
+  }
+
+  switchAllDoors() {
+    this.placements.forEach((placement) => {
+      if (placement.toggleIsRaised) {
+        placement.toggleIsRaised();
+      }
+    });
+  }
+
+  stealInventory() {
+    this.placements.forEach((p) => {
+      p.resetHasBeenCollected();
+    });
+    this.inventory.clear();
   }
 
   setDeathOutcome(causeOfDeath) {
@@ -90,6 +120,8 @@ export class LevelState {
       placements: this.placements,
       deathOutcome: this.deathOutcome,
       isCompleted: this.isCompleted,
+      cameraTransformX: this.camera.transformX,
+      cameraTransformY: this.camera.transformY,
     };
   }
 
