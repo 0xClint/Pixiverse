@@ -4,11 +4,11 @@ import LevelBackgroundTilesLayer from "./LevelBackgroundTilesLayer";
 import LevelPlacementsLayer from "./LevelPlacementsLayer";
 import { useEffect, useState } from "react";
 import { LevelState } from "@/classes/Levelstate";
-import FlourCount from "../hud/FlourCount";
-import LevelCompleteMessage from "../hud/LevelCompleteMessage";
+import LevelCompleteMessage from "@/components/hud/LevelCompleteMessage";
 import { useRecoilValue } from "recoil";
 import { currentLevelIdAtom } from "@/atoms/currentLevelIdAtom";
-import DeathMessage from "../hud/DeathMessage";
+import DeathMessage from "@/components/hud/DeathMessage";
+import TopHud from "@/components/hud/TopHud";
 
 export default function RenderLevel() {
   const [level, setLevel] = useState(null);
@@ -44,7 +44,7 @@ export default function RenderLevel() {
           <LevelPlacementsLayer level={level} />
         </div>
       </div>
-      <FlourCount level={level} />
+      <TopHud level={level} />
       {level.isCompleted && <LevelCompleteMessage />}
       {level.deathOutcome && <DeathMessage level={level} />}
     </div>

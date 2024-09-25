@@ -94,7 +94,7 @@ const level = {
     // },
     {
       x: 3,
-      y: 7,
+      y: 5,
       type: PLACEMENT_TYPE_FLOUR,
     },
     // {

@@ -4,6 +4,9 @@ import { SPRITE_SHEET_SRC } from "./helpers/consts";
 import RenderLevel from "./components/level-layout/RenderLevel";
 import { useRecoilState } from "recoil";
 import { spriteSheetImageAtom } from "./atoms/spriteSheetImageAtom";
+import soundsManager from "./classes/Sounds";
+
+soundsManager.init();
 
 export default function App() {
   const [spriteSheetImage, setSpriteSheetImage] =
