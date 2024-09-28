@@ -69,7 +69,7 @@ const showDeathType = (deathType) => {
   }
 };
 
-export default function DeathMessage({ level }) {
+export const DeathMessage = ({ level }) => {
   const handleRestartLevel = () => {
     level.restart();
   };
@@ -90,4 +90,4 @@ export default function DeathMessage({ level }) {
       </div>
     </div>
   );
-}
+};

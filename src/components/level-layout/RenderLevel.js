@@ -8,7 +8,7 @@ import { LevelState } from "@/classes/Levelstate";
 import { useRecoilValue } from "recoil";
 import { currentLevelIdAtom } from "@/atoms/currentLevelIdAtom";
 import TopHud from "@/components/hud/TopHud";
-import DeathMessage from "../hud/DeathMessage";
+import { DeathMessage } from "../hud/DeathMessage";
 import LevelCompleteMessage from "../hud/LevelCompleteMessage";
 
 export default function RenderLevel() {

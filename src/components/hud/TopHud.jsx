@@ -3,6 +3,7 @@ import styles from "./TopHud.module.css";
 import { ClockCount } from "./ClockCount";
 import { FlourCount } from "./FlourCount";
 import InventoryList from "./InventoryList";
+import EditorDropdown from "./EditorDropdown";
 
 const TopHud = ({ level }) => {
   return (
@@ -12,9 +13,9 @@ const TopHud = ({ level }) => {
         <ClockCount level={level} />
         <InventoryList level={level} />
       </div>
-      {/* <div className={styles.topHudRight}>
+      <div className={styles.topHudRight}>
         <EditorDropdown level={level} />
-      </div> */}
+      </div>
     </div>
   );
 };
