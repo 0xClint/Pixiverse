@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./TopHud.module.css";
 import { ClockCount } from "./ClockCount";
 import { FlourCount } from "./FlourCount";
+import InventoryList from "./InventoryList";
 
 const TopHud = ({ level }) => {
   return (
@@ -9,7 +10,7 @@ const TopHud = ({ level }) => {
       <div className={styles.topHudLeft}>
         <FlourCount level={level} />
         <ClockCount level={level} />
-        {/* <InventoryList level={level} /> */}
+        <InventoryList level={level} />
       </div>
       {/* <div className={styles.topHudRight}>
         <EditorDropdown level={level} />

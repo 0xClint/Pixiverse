@@ -1,4 +1,5 @@
 import { CelebrationPlacement } from "@/game-objects/CelebrationPlacement";
+import { CiabattaPlacement } from "@/game-objects/CiabattaPlacement";
 import { ConveyorPlacement } from "@/game-objects/ConveyorPlacement";
 import { DoorSwitchPlacement } from "@/game-objects/DoorSwitchPlacement";
 import { FirePickupPlacement } from "@/game-objects/FirePickupPlacement";
@@ -41,6 +42,7 @@ import {
   PLACEMENT_TYPE_SWITCH_DOOR,
   PLACEMENT_TYPE_TELEPORT,
   PLACEMENT_TYPE_THIEF,
+  PLACEMENT_TYPE_CIABATTA,
 } from "@/helpers/consts";
 
 const placementTypeClassMap = {
@@ -65,7 +67,7 @@ const placementTypeClassMap = {
   [PLACEMENT_TYPE_SWITCH]: DoorSwitchPlacement,
   [PLACEMENT_TYPE_TELEPORT]: TeleportPlacement,
   [PLACEMENT_TYPE_THIEF]: ThiefPlacement,
-  // [PLACEMENT_TYPE_CIABATTA]: CiabattaPlacement,
+  [PLACEMENT_TYPE_CIABATTA]: CiabattaPlacement,
 };
 
 class PlacementFactory {

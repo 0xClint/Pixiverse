@@ -1,4 +1,4 @@
-import { PLACEMENT_TYPE_HERO } from "@/helpers/consts";
+import { PLACEMENT_TYPE_HERO, PLACEMENT_TYPE_WALL } from "@/helpers/consts";
 import { placementFactory } from "./PlacementFactory";
 import { GameLoop } from "./GameLoop";
 import { DirectionControls } from "./DirectionControls";
@@ -13,7 +13,7 @@ export class LevelState {
     this.id = levelId;
     this.onEmit = onEmit;
     this.directionControls = new DirectionControls();
-
+    this.editModePlacementType = PLACEMENT_TYPE_WALL;
     //Start the level
     this.start();
   }
@@ -44,7 +44,7 @@ export class LevelState {
     this.camera = new Camera(this);
 
     //Create a Clock
-    this.clock = new Clock(20, this);
+    this.clock = new Clock(100, this);
 
     this.startGameLoop();
   }
@@ -66,6 +66,12 @@ export class LevelState {
     });
   }
 
+  copyPlacementsToClipboard() {}
+
+  setEditModePlacementType(newType) {
+    this.editModePlacementType = newType;
+  }
+
   tick() {
     //Check for movement here
     if (this.directionControls.direction) {
@@ -84,7 +90,7 @@ export class LevelState {
     this.camera.tick();
 
     //Update the clock
-    this.clock.tick();
+    // this.clock.tick();
 
     // Emit any changes in React
     this.onEmit(this.getState());
@@ -130,6 +136,10 @@ export class LevelState {
       cameraTransformX: this.camera.transformX,
       cameraTransformY: this.camera.transformY,
       secondsRemaining: this.clock.secondsRemaining,
+      inventory: this.inventory,
+      restart: () => {
+        this.start();
+      },
     };
   }
 
