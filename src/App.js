@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
-
+import { useEffect } from "react";
 import { SPRITE_SHEET_SRC } from "./helpers/consts";
-import RenderLevel from "./components/level-layout/RenderLevel";
 import { useRecoilState } from "recoil";
 import { spriteSheetImageAtom } from "./atoms/spriteSheetImageAtom";
 import soundsManager from "./classes/Sounds";
-import RenderLand from "./components/level-layout/RenderLand";
+import RenderGame from "./components/level-layout/RenderGame";
 
 soundsManager.init();
 
-export default function App({ gameData = null }) {
+export default function App({ gameData }) {
   const [spriteSheetImage, setSpriteSheetImage] =
     useRecoilState(spriteSheetImageAtom);
 
@@ -22,5 +20,5 @@ export default function App({ gameData = null }) {
   }, [setSpriteSheetImage]);
 
   if (!spriteSheetImage) return null;
-  return gameData ? <RenderLand gameData={gameData} /> : <RenderLevel />;
+  return <RenderGame gameData={gameData} />;
 }

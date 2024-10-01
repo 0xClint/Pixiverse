@@ -16,8 +16,8 @@ contract GameItems is ERC721URIStorage, Ownable {
         bool exists; // By default false
     }
 
-    mapping(uint256 => Level) public levels;
-    mapping(address => uint256[]) public playerItems;
+    mapping(uint256 => Level) public levels; 
+    mapping(address => uint256[]) public playerItems; 
     mapping(address => mapping(uint256 => bool)) public playerLevelAwarded; // Tracks Already Awarded Items
 
     uint256 private _nextTokenId;
@@ -27,47 +27,43 @@ contract GameItems is ERC721URIStorage, Ownable {
 
     function addLevel(string memory itemURI) public onlyOwner {
         if (bytes(itemURI).length == 0) revert InvalidURI(itemURI);
-
+        
         levels[_nextLevelId++] = Level(itemURI, true);
     }
 
-    function awardItem(
-        address player,
-        uint256 levelId
-    ) public returns (uint256 tokenId) {
+    function awardItem(address player, uint256 levelId) public returns (uint256 tokenId) {
         if (player == address(0)) revert InvalidAddress(player);
-
+        
         Level storage level = levels[levelId];
         if (!level.exists) revert LevelNotFound(levelId);
-        if (playerLevelAwarded[player][levelId])
-            revert ItemAlreadyAwarded(player, levelId);
+        if (playerLevelAwarded[player][levelId]) revert ItemAlreadyAwarded(player, levelId);
 
         tokenId = _nextTokenId++;
         _mint(player, tokenId);
         _setTokenURI(tokenId, level.itemURI);
         playerItems[player].push(tokenId);
-        playerLevelAwarded[player][levelId] = true;
+        playerLevelAwarded[player][levelId] = true; 
     }
 
-    function getPlayerItems(
-        address player
-    ) public view returns (uint256[] memory) {
+    function getPlayerItems(address player) public view returns (uint256[] memory) {
         return playerItems[player];
     }
 
-    function getPlayerItemsWithDetails(
-        address player
-    )
-        public
-        view
-        returns (uint256[] memory tokenIds, string[] memory itemURIs)
-    {
+    function getPlayerItemsWithDetails(address player) public view returns (uint256[] memory tokenIds, string[] memory itemURIs) {
         uint256[] memory items = playerItems[player];
         tokenIds = items;
         itemURIs = new string[](items.length);
-
+        
         for (uint256 i = 0; i < items.length; i++) {
             itemURIs[i] = tokenURI(items[i]);
         }
+    }
+   
+    function getAllLevels() public view returns (Level[] memory) {
+        Level[] memory allLevels = new Level[](_nextLevelId);
+        for (uint256 i = 0; i < _nextLevelId; i++) {
+            allLevels[i] = levels[i];
+        }
+        return allLevels;
     }
 }

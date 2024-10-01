@@ -4,17 +4,16 @@ import LevelBackgroundTilesLayer from "./LevelBackgroundTilesLayer";
 import LevelPlacementsLayer from "./LevelPlacementsLayer";
 import { useEffect, useState } from "react";
 import { LevelState } from "@/classes/Levelstate";
-import { useRecoilValue } from "recoil";
-import { currentLevelIdAtom } from "@/atoms/currentLevelIdAtom";
 import TopHud from "@/components/hud/TopHud";
 import { DeathMessage } from "../hud/DeathMessage";
 import LevelCompleteMessage from "../hud/LevelCompleteMessage";
 import LevelsList from "../hud/LevelsList";
-import LevelsMap from "@/Levels/LevelsMap";
+import EditorDropdown from "../hud/EditorDropdown";
+import { useRouter } from "next/router";
 
-export default function RenderLand({ gameData }) {
+export default function RenderGame({ gameData }) {
+  const router = useRouter();
   const [level, setLevel] = useState(null);
-  //   const currentLevelId = useRecoilValue(currentLevelIdAtom);
 
   useEffect(() => {
     //Create and subscribe to state change
@@ -49,7 +48,13 @@ export default function RenderLand({ gameData }) {
         {level.isCompleted && <LevelCompleteMessage />}
         {level.deathOutcome && <DeathMessage level={level} />}
       </div>
-      <TopHud level={level} />
+      <TopHud
+        level={level}
+        isLevelMode={router?.pathname.includes("/levels")}
+      />
+      {!router?.pathname.includes("/levels") && (
+        <EditorDropdown level={level} />
+      )}
     </div>
   );
 }

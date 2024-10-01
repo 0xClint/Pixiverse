@@ -2,25 +2,12 @@ import { Header } from "@/components";
 import { useRouter } from "next/router";
 import React from "react";
 import { LockIcon } from "@/assets/Icons/";
-import { useRecoilState } from "recoil";
-import { currentLevelIdAtom } from "@/atoms/currentLevelIdAtom";
-import LevelsMap from "@/Levels/LevelsMap";
+import { useGame } from "@/contexts/GameProvider";
 
 const Levels = () => {
   const route = useRouter();
-  const [currentId, setCurrentId] = useRecoilState(currentLevelIdAtom);
+  const { userLevels, gameLevels } = useGame();
 
-  const handleGoToNextLevel = (levelId) => {
-    console.log(LevelsMap);
-    const levelsArray = Object.keys(LevelsMap);
-    console.log(levelsArray);
-    const currentIndex = levelsArray.findIndex((id) => {
-      return id === `Level${levelId}`;
-    });
-    console.log(levelsArray[currentIndex]);
-    setCurrentId(levelsArray[currentIndex]);
-    route.push(`/level`);
-  };
   return (
     <>
       <div className="">
@@ -32,48 +19,27 @@ const Levels = () => {
           <Header />
           <div className="h-full flex-center pb-10">
             <div className="w-[300px] card-container text-[#8A664E]  p-4">
-              {/* <button onClick={() => uploadLightHouseFile()}>Retrieve</button> */}
-              <button onClick={() => handleGoToNextLevel()}>Retrieve</button>
               <h2 className="w-full bg-tertiary text-white py-2  rounded text-center">
                 Levels
               </h2>
               <div className="w-full flex flex-col my-3 ">
-                <div
-                  onClick={() => handleGoToNextLevel(1)}
-                  className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
-                >
-                  Level 1
-                  <LockIcon className="absolute right-1 top-2" />
-                </div>
-                <div
-                  onClick={() => handleGoToNextLevel(2)}
-                  className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
-                >
-                  Level 2
-                  <LockIcon className="absolute right-1 top-2" />
-                </div>
-                <div
-                  onClick={() => handleGoToNextLevel(3)}
-                  className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
-                >
-                  Level 3
-                  <LockIcon className="absolute right-1 top-2" />
-                </div>
-
-                <div
-                  onClick={() => handleGoToNextLevel(4)}
-                  className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
-                >
-                  Level 4
-                  <LockIcon className="absolute right-1 top-2" />
-                </div>
-                <div
-                  onClick={() => handleGoToNextLevel(5)}
-                  className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
-                >
-                  Level 5
-                  <LockIcon className="absolute right-1 top-2" />
-                </div>
+                {gameLevels?.map(({ itemURI }, index) => {
+                  console.log(itemURI, index);
+                  return (
+                    <button
+                      key={itemURI}
+                      disabled={userLevels < index}
+                      onClick={() => route.push(`/levels/${itemURI}`)}
+                      className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
+                    >
+                      Level {index + 1}
+                      {userLevels < index && (
+                        <LockIcon className="absolute right-1 top-2" />
+                      )}
+                    </button>
+                  );
+                })}
+                {/* <button onClick={() => handleGo()}>Hello</button> */}
               </div>
               <button
                 onClick={() => route.push(`/`)}

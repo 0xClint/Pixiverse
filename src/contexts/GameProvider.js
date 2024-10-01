@@ -1,10 +1,18 @@
 import { useOkto } from "okto-sdk-react";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useGameAuth } from "./GameAuthProvider";
 import { convertWalletData, findObjectByCid } from "@/helpers/convertor";
 import {
   GAME_CONTRACT_ABI,
   GAME_CONTRACT_ADDRESS,
+  WORLD_ITEM_CONTRACT_ABI,
+  WORLD_ITEMS_CONTRACT_ADDRESS,
   WORLD_SPACE_CONTRACT_ABI,
   WORLD_SPACE_CONTRACT_ADDRESS,
 } from "@/contracts/conts";
@@ -17,6 +25,8 @@ const GameProviderFn = () => {
   const { isAuthenticated, setAuthenticated } = useGameAuth();
   const [userDetails, setUserDetails] = useState(null);
   const [lands, setLands] = useState(null);
+  const [userLevels, setUserLevels] = useState(null);
+  const [gameLevels, setGameLevels] = useState(null);
   const [wallets, setWallets] = useState(null);
   const [account, setAccount] = useState("");
   const {
@@ -46,7 +56,7 @@ const GameProviderFn = () => {
     }
     try {
       const walletsData = await getWallets();
-      // console.log(walletsData?.wallets);
+      console.log(walletsData?.wallets);
       const data = convertWalletData(walletsData?.wallets);
       setWallets(data);
       setAccount(data?.POLYGON_TESTNET_AMOY.address);
@@ -55,60 +65,68 @@ const GameProviderFn = () => {
     }
   };
 
-  const createWorld = async (name, cid) => {
-    const encodedTransferCall = encodeFunctionData({
-      abi: WORLD_SPACE_CONTRACT_ABI,
-      functionName: "createSpace",
-      args: [name, INITIAL_SPACE_SIZE, cid],
-    });
-    if (account) {
-      const requestData = {
-        network_name: "POLYGON_TESTNET_AMOY",
-        transaction: {
-          from: account,
-          to: WORLD_SPACE_CONTRACT_ADDRESS,
-          data: encodedTransferCall,
-          value: "0x0",
-        },
-      };
-
-      const response = await executeRawTransaction(requestData);
-      console.log(response);
-      await transactionListener(response.jobId);
-    } else {
-      console.log("account not found!");
-    }
-  };
-
-  const SaveWorld = async (currCid, gameData) => {
-    const currGameState = findObjectByCid(lands, currCid);
-
-    if (currGameState && account) {
-      const newCid = await uploadFile(gameData);
-
+  const createWorld = useCallback(
+    async (name, cid) => {
       const encodedTransferCall = encodeFunctionData({
         abi: WORLD_SPACE_CONTRACT_ABI,
-        functionName: "setSpaceURI",
-        args: [Number(currGameState.spaceId), newCid],
+        functionName: "createSpace",
+        args: [name, INITIAL_SPACE_SIZE, cid],
       });
+      if (account) {
+        const requestData = {
+          network_name: "POLYGON_TESTNET_AMOY",
+          transaction: {
+            from: account,
+            to: WORLD_SPACE_CONTRACT_ADDRESS,
+            data: encodedTransferCall,
+            value: "0x0",
+          },
+        };
 
-      const requestData = {
-        network_name: "POLYGON_TESTNET_AMOY",
-        transaction: {
-          from: account,
-          to: WORLD_SPACE_CONTRACT_ADDRESS,
-          data: encodedTransferCall,
-          value: "0x0",
-        },
-      };
+        const response = await executeRawTransaction(requestData);
+        console.log(response);
+        await transactionListener(response.jobId);
+      } else {
+        console.log("account not found!");
+      }
+    },
+    [account]
+  );
 
-      const response = await executeRawTransaction(requestData);
-      console.log(response);
-      await transactionListener(response.jobId);
-    } else {
-      console.log("Your are on wrong world url!");
-    }
-  };
+  const SaveWorld = useCallback(
+    async (currCid, gameData) => {
+      console.log(lands,account);
+      const currGameState = findObjectByCid(lands, currCid);
+      console.log(currGameState);
+
+      if (currGameState && account) {
+        const newCid = await uploadFile(gameData);
+
+        const encodedTransferCall = encodeFunctionData({
+          abi: WORLD_SPACE_CONTRACT_ABI,
+          functionName: "setSpaceURI",
+          args: [Number(currGameState.spaceId), newCid],
+        });
+
+        const requestData = {
+          network_name: "POLYGON_TESTNET_AMOY",
+          transaction: {
+            from: account,
+            to: WORLD_SPACE_CONTRACT_ADDRESS,
+            data: encodedTransferCall,
+            value: "0x0",
+          },
+        };
+
+        const response = await executeRawTransaction(requestData);
+        console.log(response);
+        await transactionListener(response.jobId);
+      } else {
+        console.log("Your are on wrong world url!");
+      }
+    },
+    [account, lands]
+  );
 
   const transactionListener = (job_id) => {
     return new Promise((resolve, reject) => {
@@ -158,6 +176,8 @@ const GameProviderFn = () => {
           functionName: "getAllSpacesDetails",
           args: [account],
         });
+        console.log("lands");
+        console.log(res);
         setLands(res);
       }
     } catch (error) {
@@ -165,9 +185,47 @@ const GameProviderFn = () => {
     }
   };
 
+  const getAllLevels = async () => {
+    try {
+      const res = await publicClient.readContract({
+        address: WORLD_ITEMS_CONTRACT_ADDRESS,
+        abi: WORLD_ITEM_CONTRACT_ABI,
+        functionName: "getAllLevels",
+      });
+      console.log(res);
+      setGameLevels(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getUserLevels = async () => {
+    try {
+      if (account) {
+        const res = await publicClient.readContract({
+          address: WORLD_ITEMS_CONTRACT_ADDRESS,
+          abi: WORLD_ITEM_CONTRACT_ABI,
+          functionName: "balanceOf",
+          args: [account],
+        });
+        console.log(res);
+        setUserLevels(Number(res));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getUserLevels();
+  }, [isAuthenticated, setAuthenticated, account]);
+
+  useEffect(() => {
+    getAllLevels();
+  }, []);
+
   useEffect(() => {
     getAllLands();
-  }, [isAuthenticated, setAuthenticated, account, SaveWorld, createWorld]);
+  }, [isAuthenticated, setAuthenticated, account]);
 
   return {
     fetchUserDetails,
@@ -178,6 +236,8 @@ const GameProviderFn = () => {
     lands,
     setLands,
     SaveWorld,
+    userLevels,
+    gameLevels,
   };
 };
 

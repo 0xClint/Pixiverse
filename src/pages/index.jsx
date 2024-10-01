@@ -1,13 +1,17 @@
 import App from "@/App";
 import { Header, MyLands, NewGameModal } from "@/components";
 import { useGame } from "@/contexts/GameProvider";
+import level from "@/Levels/Level2";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Page() {
   const [landsModal, setLandsModal] = useState(false);
   const [newGameModal, setNewGameModal] = useState(false);
-  // const { fetchUserDetails, createWorldFunc, getAllLandsFunc, lands } =
-  //   useGame();
+  const router = useRouter();
+  const handleExceute = async () => {
+    console.log(level);
+  };
   return (
     <>
       <div className="">
@@ -33,6 +37,12 @@ export default function Page() {
               >
                 My Lands
               </button>
+              <button
+                onClick={() => router.push("/levels")}
+                className="w-[300px] pixelated flex-center bg-secondary p-3 border-2 border-black rounded-md hover:scale-[102%]"
+              >
+                Challenges
+              </button>
               <button className="w-[300px] pixelated flex-center bg-secondary p-3 border-2 border-black rounded-md hover:scale-[102%]">
                 Settings
               </button>
@@ -40,7 +50,7 @@ export default function Page() {
                 Controls
               </button>
               <button
-                // onClick={() => }
+                onClick={() => handleExceute()}
                 className="w-[300px] pixelated flex-center bg-secondary p-3 border-2 border-black rounded-md hover:scale-[102%]"
               >
                 Temp

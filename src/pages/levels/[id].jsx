@@ -4,14 +4,12 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
-
-const Land = () => {
-
+const Level = () => {
   const router = useRouter();
-  const [gameData, setGameData] = useState(null);
+  const [levelData, setLevelData] = useState(null);
   const [loader, setLoader] = useState(true);
 
-  const fetchGameData = async () => {
+  const fetchLevelData = async () => {
     const cid = router.query.id;
     if (cid) {
       setLoader(true);
@@ -21,7 +19,7 @@ const Land = () => {
           `https://gateway.lighthouse.storage/ipfs/${cid}/`
         );
         console.log(res.data);
-        setGameData(res.data);
+        setLevelData(res.data);
       } catch (error) {
         console.log(error);
       }
@@ -30,19 +28,18 @@ const Land = () => {
   };
 
   useEffect(() => {
-    fetchGameData();
+    fetchLevelData();
   }, [router.query.id]);
 
   return loader ? (
     <Loader />
-  ) : gameData ? (
+  ) : levelData ? (
     <>
-      {/* <App gameData={tempData} /> */}
-      <App gameData={gameData} />
+      <App gameData={levelData} />
     </>
   ) : (
     <div>Something Went Wrong! Please Go to Home</div>
   );
 };
 
-export default Land;
+export default Level;
