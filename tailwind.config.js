@@ -12,6 +12,9 @@ module.exports = {
         secondary: "rgba(var(--color-secondary))",
         tertiary: "rgba(var(--color-tertiary))",
       },
+      spacing: {
+        pixelSize: "var(--pixel-size)", // Default value; you can change it as needed
+      },
     },
   },
   plugins: [],

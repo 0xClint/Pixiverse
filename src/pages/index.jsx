@@ -6,8 +6,8 @@ import { useState } from "react";
 export default function Page() {
   const [landsModal, setLandsModal] = useState(false);
   const [newGameModal, setNewGameModal] = useState(false);
-  const { fetchUserDetails, createWorldFunc, getAllLandsFunc } = useGame();
-
+  // const { fetchUserDetails, createWorldFunc, getAllLandsFunc, lands } =
+  //   useGame();
   return (
     <>
       <div className="">
@@ -40,7 +40,7 @@ export default function Page() {
                 Controls
               </button>
               <button
-                onClick={() => getAllLandsFunc()}
+                // onClick={() => }
                 className="w-[300px] pixelated flex-center bg-secondary p-3 border-2 border-black rounded-md hover:scale-[102%]"
               >
                 Temp

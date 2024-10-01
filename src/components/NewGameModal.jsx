@@ -5,12 +5,14 @@ import { useGame } from "@/contexts/GameProvider";
 import newLevel from "@/Levels/Lobby";
 import { uploadFile } from "@/utils/lighthouse";
 import { Loader } from ".";
+import { useRouter } from "next/router";
 
 const NewGameModal = ({ isOpen, setIsOpen }) => {
-  const { fetchUserDetails, createWorldFunc, getAllLandsFunc } = useGame();
+  const { fetchUserDetails, createWorld, getAllLandsFunc } = useGame();
   const [newGameModal, setNewGameModal] = useState(null);
   const [loader, setLoader] = useState(false);
   const [gameName, setGameName] = useState("");
+  const router = useRouter();
 
   const variants = {
     hidden: { y: 50, opacity: 0 },
@@ -22,8 +24,10 @@ const NewGameModal = ({ isOpen, setIsOpen }) => {
     setLoader(true);
     const cid = await uploadFile(newLevel);
     console.log(cid);
-    await createWorldFunc(gameName, cid);
+    await createWorld(gameName, cid);
     setLoader(false);
+    router.push(`/land/${cid}`);
+    setNewGameModal(false);
   };
 
   useEffect(() => {

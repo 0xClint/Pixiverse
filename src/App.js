@@ -8,26 +8,8 @@ import soundsManager from "./classes/Sounds";
 import RenderLand from "./components/level-layout/RenderLand";
 
 soundsManager.init();
-// export default function App({ gameData = tempdata }) {
-const tempdata = {
-  theme: "GREEN",
-  tilesWidth: 8,
-  tilesHeight: 8,
-  placements: [
-    {
-      x: 2,
-      y: 2,
-      type: "HERO",
-    },
 
-    {
-      x: 4,
-      y: 4,
-      type: "WALL",
-    },
-  ],
-};
-export default function App({ gameData = tempdata }) {
+export default function App({ gameData = null }) {
   const [spriteSheetImage, setSpriteSheetImage] =
     useRecoilState(spriteSheetImageAtom);
 

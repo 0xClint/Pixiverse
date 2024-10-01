@@ -91,6 +91,17 @@ export class LevelState {
     );
   }
 
+  getPlacementsData() {
+    // Convert the Placements to type,x,y JSON
+    this.gameLoop.stop();
+    return {
+      theme: this.theme,
+      tilesWidth: this.tilesWidth,
+      tilesHeight: this.tilesHeight,
+      placements: this.placements.map(({ type, x, y }) => ({ type, x, y })),
+    };
+  }
+
   setEditModePlacementType(newType) {
     this.editModePlacementType = newType;
   }
@@ -178,6 +189,7 @@ export class LevelState {
       deletePlacement: this.deletePlacement.bind(this),
       setEditModePlacementType: this.setEditModePlacementType.bind(this),
       copyPlacementsToClipboard: this.copyPlacementsToClipboard.bind(this),
+      getPlacementsData: this.getPlacementsData.bind(this),
     };
   }
 

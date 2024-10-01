@@ -1,9 +1,14 @@
 import ReactDom from "react-dom";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useGame } from "@/contexts/GameProvider";
+import { useRouter } from "next/router";
 
 const MyLands = ({ isOpen, setIsOpen }) => {
+  const { lands } = useGame();
+  const router = useRouter();
   const [landsModal, setLandsModal] = useState(null);
+
   const variants = {
     hidden: { y: 50, opacity: 0 },
     visible: { y: 0, opacity: 1 },
@@ -37,12 +42,17 @@ const MyLands = ({ isOpen, setIsOpen }) => {
             </span>
             <div className={"w-full h-full flex flex-col gap-y-4"}>
               <div className="w-full flex flex-col my-3 ">
-                <div className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2">
-                  Land 1
-                </div>
-                <div className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2">
-                  Land 2
-                </div>
+                {lands?.map(({ name, uri }) => {
+                  return (
+                    <div
+                      key={uri}
+                      onClick={() => router.push(`/land/${uri}`)}
+                      className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
+                    >
+                      {name}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </motion.div>

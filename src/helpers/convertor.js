@@ -8,3 +8,7 @@ export function convertWalletData(response) {
     return acc;
   }, {});
 }
+
+export const findObjectByCid = (arr, targetUri) => {
+  return arr.find((obj) => obj.uri === targetUri);
+};

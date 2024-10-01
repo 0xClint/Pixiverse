@@ -5,7 +5,6 @@ import { LockIcon } from "@/assets/Icons/";
 import { useRecoilState } from "recoil";
 import { currentLevelIdAtom } from "@/atoms/currentLevelIdAtom";
 import LevelsMap from "@/Levels/LevelsMap";
-import { uploadLightHouseFile } from "@/utils/lighthouse";
 
 const Levels = () => {
   const route = useRouter();
@@ -20,7 +19,7 @@ const Levels = () => {
     });
     console.log(levelsArray[currentIndex]);
     setCurrentId(levelsArray[currentIndex]);
-    route.push(`/land/${levelId}`);
+    route.push(`/level`);
   };
   return (
     <>
@@ -77,7 +76,7 @@ const Levels = () => {
                 </div>
               </div>
               <button
-                onClick={() => route.push(`/land/${1}`)}
+                onClick={() => route.push(`/`)}
                 className="w-full border-2 border-tertiary hover:scale-[105%] text-white py-1  rounded text-center"
               >
                 Back

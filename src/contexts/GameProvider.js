@@ -1,7 +1,7 @@
 import { useOkto } from "okto-sdk-react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useGameAuth } from "./GameAuthProvider";
-import { convertWalletData } from "@/helpers/convertor";
+import { convertWalletData, findObjectByCid } from "@/helpers/convertor";
 import {
   GAME_CONTRACT_ABI,
   GAME_CONTRACT_ADDRESS,
@@ -9,13 +9,14 @@ import {
   WORLD_SPACE_CONTRACT_ADDRESS,
 } from "@/contracts/conts";
 import { encodeFunctionData } from "viem";
-import { publicClient } from "@/utils/ViemConfig";
+import { publicClient } from "@/utils/viemConfig";
 import { INITIAL_SPACE_SIZE } from "@/helpers/consts";
+import { uploadFile } from "@/utils/lighthouse";
 
 const GameProviderFn = () => {
   const { isAuthenticated, setAuthenticated } = useGameAuth();
   const [userDetails, setUserDetails] = useState(null);
-  const [orderId, setOrderId] = useState("");
+  const [lands, setLands] = useState(null);
   const [wallets, setWallets] = useState(null);
   const [account, setAccount] = useState("");
   const {
@@ -54,13 +55,12 @@ const GameProviderFn = () => {
     }
   };
 
-  const createWorldFunc = async (name, cid) => {
+  const createWorld = async (name, cid) => {
     const encodedTransferCall = encodeFunctionData({
       abi: WORLD_SPACE_CONTRACT_ABI,
       functionName: "createSpace",
       args: [name, INITIAL_SPACE_SIZE, cid],
     });
-    const account = wallets.POLYGON_TESTNET_AMOY.address;
     if (account) {
       const requestData = {
         network_name: "POLYGON_TESTNET_AMOY",
@@ -80,6 +80,36 @@ const GameProviderFn = () => {
     }
   };
 
+  const SaveWorld = async (currCid, gameData) => {
+    const currGameState = findObjectByCid(lands, currCid);
+
+    if (currGameState && account) {
+      const newCid = await uploadFile(gameData);
+
+      const encodedTransferCall = encodeFunctionData({
+        abi: WORLD_SPACE_CONTRACT_ABI,
+        functionName: "setSpaceURI",
+        args: [Number(currGameState.spaceId), newCid],
+      });
+
+      const requestData = {
+        network_name: "POLYGON_TESTNET_AMOY",
+        transaction: {
+          from: account,
+          to: WORLD_SPACE_CONTRACT_ADDRESS,
+          data: encodedTransferCall,
+          value: "0x0",
+        },
+      };
+
+      const response = await executeRawTransaction(requestData);
+      console.log(response);
+      await transactionListener(response.jobId);
+    } else {
+      console.log("Your are on wrong world url!");
+    }
+  };
+
   const transactionListener = (job_id) => {
     return new Promise((resolve, reject) => {
       const intervalId = setInterval(async () => {
@@ -92,15 +122,17 @@ const GameProviderFn = () => {
             console.log("SUCCESS received, stopping interval.");
             console.log(data.jobs[0]);
             clearInterval(intervalId);
+            clearTimeout(timeoutId);
             resolve("Transaction successful");
           }
         } catch (error) {
           clearInterval(intervalId);
+          clearTimeout(timeoutId);
           reject("Error in transaction listener: " + error);
         }
       }, 3000);
 
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         console.log("END! Stopping interval.");
         clearInterval(intervalId);
         reject("Transaction timed out after 50 seconds");
@@ -117,22 +149,35 @@ const GameProviderFn = () => {
   }, [isAuthenticated, setAuthenticated]);
 
   //**********************getter****************** */
-  const getAllLandsFunc = async () => {
-    const res = await publicClient.readContract({
-      address: WORLD_SPACE_CONTRACT_ADDRESS,
-      abi: WORLD_SPACE_CONTRACT_ABI,
-      functionName: "getAllSpacesDetails",
-      args: [account],
-    });
-    console.log(res);
+  const getAllLands = async () => {
+    try {
+      if (account) {
+        const res = await publicClient.readContract({
+          address: WORLD_SPACE_CONTRACT_ADDRESS,
+          abi: WORLD_SPACE_CONTRACT_ABI,
+          functionName: "getAllSpacesDetails",
+          args: [account],
+        });
+        setLands(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    getAllLands();
+  }, [isAuthenticated, setAuthenticated, account, SaveWorld, createWorld]);
 
   return {
     fetchUserDetails,
     fetchUserWallets,
     wallets,
-    createWorldFunc,
-    getAllLandsFunc,
+    createWorld,
+    getAllLands,
+    lands,
+    setLands,
+    SaveWorld,
   };
 };
 

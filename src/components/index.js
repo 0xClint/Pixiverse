@@ -4,5 +4,14 @@ import UserLoginModal from "./UserLoginModal";
 import Layout from "./Layout";
 import NewGameModal from "./NewGameModal";
 import Loader from "./Loader";
+import SaveGameData from "./SaveGameData";
 
-export { Header, MyLands, UserLoginModal, Layout, NewGameModal, Loader };
+export {
+  Header,
+  MyLands,
+  UserLoginModal,
+  Layout,
+  NewGameModal,
+  Loader,
+  SaveGameData,
+};
