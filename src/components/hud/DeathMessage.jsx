@@ -1,6 +1,3 @@
-import { currentLevelIdAtom } from "@/atoms/currentLevelIdAtom";
-import Levels from "@/Levels/LevelsMap";
-import { useRecoilState } from "recoil";
 import Sprite from "@/components/object-graphics/Sprite";
 import styles from "./PopupMessage.module.css";
 import LevelFailed from "../object-graphics/LevelFailed";

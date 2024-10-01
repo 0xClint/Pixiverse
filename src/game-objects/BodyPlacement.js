@@ -142,6 +142,11 @@ export class BodyPlacement extends Placement {
       this.level.completeLevel();
       soundsManager.playSfx(SFX.WIN);
     }
+
+    const enterLevel = collision.withEntersLevel();
+    if (enterLevel) {
+      this.level.enterLevel();
+    }
   }
 
   takesDamage() {

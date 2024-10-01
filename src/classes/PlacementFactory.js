@@ -12,6 +12,7 @@ import { HeroPlacement } from "@/game-objects/HeroPlacement";
 import { IcePickupPlacement } from "@/game-objects/IcePickupPlacement";
 import { IcePlacement } from "@/game-objects/IcePlacement";
 import { KeyPlacement } from "@/game-objects/KeyPlacement";
+import { LevelEntryPlacement } from "@/game-objects/LevelEnteryPlacement";
 import { LockPlacement } from "@/game-objects/LockPlacement";
 import { RoamingEnemyPlacement } from "@/game-objects/RoamingEnemyPlacement";
 import { SwitchableDoorPlacement } from "@/game-objects/SwitchableDoorPlacement";
@@ -43,6 +44,7 @@ import {
   PLACEMENT_TYPE_TELEPORT,
   PLACEMENT_TYPE_THIEF,
   PLACEMENT_TYPE_CIABATTA,
+  PLACEMENT_TYPE_LEVEL_ENTRY,
 } from "@/helpers/consts";
 
 const placementTypeClassMap = {
@@ -68,6 +70,8 @@ const placementTypeClassMap = {
   [PLACEMENT_TYPE_TELEPORT]: TeleportPlacement,
   [PLACEMENT_TYPE_THIEF]: ThiefPlacement,
   [PLACEMENT_TYPE_CIABATTA]: CiabattaPlacement,
+
+  [PLACEMENT_TYPE_LEVEL_ENTRY]: LevelEntryPlacement,
 };
 
 class PlacementFactory {

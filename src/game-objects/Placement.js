@@ -66,6 +66,9 @@ export class Placement {
   completesLevelOnCollide() {
     return false;
   }
+  showsLevelListOnCollide() {
+    return false;
+  }
 
   displayXY() {
     if (this.movingPixelsRemaining > 0) {

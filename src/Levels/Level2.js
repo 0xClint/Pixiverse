@@ -7,9 +7,9 @@ import {
 } from "@/helpers/consts";
 
 const level = {
-  theme: LEVEL_THEMES.YELLOW,
-  tilesWidth: 8,
-  tilesHeight: 8,
+  theme: LEVEL_THEMES.GREEN,
+  tilesWidth: 40,
+  tilesHeight: 20,
   placements: [
     {
       id: 0,
@@ -51,6 +51,12 @@ const level = {
       id: 6,
       x: 5,
       y: 3,
+      type: PLACEMENT_TYPE_FLOUR,
+    },
+    {
+      id: 7,
+      x: 4,
+      y: 6,
       type: PLACEMENT_TYPE_FLOUR,
     },
     {

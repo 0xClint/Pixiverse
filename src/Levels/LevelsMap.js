@@ -1,9 +1,11 @@
-import DemoLevel1 from "./DemoLevel1";
-import DemoLevel2 from "./DemoLevel2";
+import Level1 from "./Level1";
+import Level2 from "./Level2";
+import Lobby from "./Lobby";
 
-const Levels = {
-  DemoLevel1: DemoLevel1,
-  DemoLevel2: DemoLevel2,
+const LevelsMap = {
+  Lobby: Lobby,
+  Level1: Level1,
+  Level2: Level2,
 };
 
-export default Levels;
+export default LevelsMap;

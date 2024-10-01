@@ -42,6 +42,12 @@ export class Collision {
     return null;
   }
 
+  withEntersLevel() {
+    return this.placementsAtPosition.find((p) => {
+      return p.showsLevelListOnCollide();
+    });
+  }
+
   withLock() {
     return this.placementsAtPosition.find((p) => {
       return p.canBeUnlocked();

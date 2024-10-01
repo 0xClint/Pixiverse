@@ -1,5 +1,5 @@
 import { currentLevelIdAtom } from "@/atoms/currentLevelIdAtom";
-import Levels from "@/Levels/LevelsMap";
+import LevelsMap from "@/Levels/LevelsMap";
 import { useRecoilState } from "recoil";
 import styles from "@/components/hud/PopupMessage.module.css";
 import LevelCompleted from "../object-graphics/LevelCompleted";
@@ -9,7 +9,7 @@ export default function LevelCompleteMessage() {
   const [currentId, setCurrentId] = useRecoilState(currentLevelIdAtom);
 
   const handleGoToNextLevel = () => {
-    const levelsArray = Object.keys(Levels);
+    const levelsArray = Object.keys(LevelsMap);
     const currentIndex = levelsArray.findIndex((id) => {
       return id === currentId;
     });

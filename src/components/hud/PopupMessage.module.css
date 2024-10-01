@@ -9,6 +9,8 @@
 
 .popupContainer {
     position: relative;
+    transform: scale(50%);
+    font-size: x-small;
 }
 
 .quietButton {

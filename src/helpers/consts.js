@@ -26,6 +26,8 @@ export const PLACEMENT_TYPE_SWITCH_DOOR = "SWITCH_DOOR";
 export const PLACEMENT_TYPE_TELEPORT = "TELEPORT";
 export const PLACEMENT_TYPE_THIEF = "THIEF";
 
+export const PLACEMENT_TYPE_LEVEL_ENTRY = "LEVEL_ENTRY";
+
 export const DIRECTION_LEFT = "LEFT";
 export const DIRECTION_RIGHT = "RIGHT";
 export const DIRECTION_UP = "UP";
@@ -124,3 +126,5 @@ export const ICE_CORNERS = {
   BOTTOM_LEFT: "BOTTOM_LEFT",
   BOTTOM_RIGHT: "BOTTOM_RIGHT",
 };
+
+export const INITIAL_SPACE_SIZE = 8;

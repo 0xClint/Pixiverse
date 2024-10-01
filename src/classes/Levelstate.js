@@ -2,18 +2,18 @@ import { PLACEMENT_TYPE_HERO, PLACEMENT_TYPE_WALL } from "@/helpers/consts";
 import { placementFactory } from "./PlacementFactory";
 import { GameLoop } from "./GameLoop";
 import { DirectionControls } from "./DirectionControls";
-import Levels from "@/Levels/LevelsMap";
 import { Inventory } from "./Inventory";
 import { LevelAnimatedFrames } from "./LevelAnimatedFrames";
 import { Camera } from "./Camera";
 import { Clock } from "./Clock";
 
 export class LevelState {
-  constructor(levelId, onEmit) {
+  constructor(levelId, levelData, onEmit) {
     this.id = levelId;
     this.onEmit = onEmit;
     this.directionControls = new DirectionControls();
     this.editModePlacementType = PLACEMENT_TYPE_WALL;
+    this.levelData = levelData;
     //Start the level
     this.start();
   }
@@ -21,9 +21,10 @@ export class LevelState {
   start() {
     this.isCompleted = false;
     this.deathOutcome = null;
+    this.showLevelList = false;
 
-    const levelData = Levels[this.id];
-    console.log(levelData);
+    const levelData = this.levelData;
+    // console.log(levelData);
     this.theme = levelData.theme;
     this.tilesWidth = levelData.tilesWidth;
     this.tilesHeight = levelData.tilesHeight;
@@ -147,6 +148,11 @@ export class LevelState {
     this.gameLoop.stop();
   }
 
+  enterLevel() {
+    this.showLevelList = true;
+    this.gameLoop.stop();
+  }
+
   getState() {
     return {
       theme: this.theme,
@@ -159,6 +165,8 @@ export class LevelState {
       cameraTransformY: this.camera.transformY,
       secondsRemaining: this.clock.secondsRemaining,
       inventory: this.inventory,
+
+      showLevelList: this.showLevelList,
       restart: () => {
         this.start();
       },

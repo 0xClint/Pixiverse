@@ -12,18 +12,15 @@ import LevelCompleteMessage from "../hud/LevelCompleteMessage";
 import LevelsList from "../hud/LevelsList";
 import LevelsMap from "@/Levels/LevelsMap";
 
-export default function RenderLevel() {
+export default function RenderLand({ gameData }) {
   const [level, setLevel] = useState(null);
-  const currentLevelId = useRecoilValue(currentLevelIdAtom);
+  //   const currentLevelId = useRecoilValue(currentLevelIdAtom);
+
   useEffect(() => {
     //Create and subscribe to state change
-    const levelState = new LevelState(
-      currentLevelId,
-      LevelsMap[currentLevelId],
-      (newState) => {
-        setLevel(newState);
-      }
-    );
+    const levelState = new LevelState("DemoID", gameData, (newState) => {
+      setLevel(newState);
+    });
 
     //Get initial state
     setLevel(levelState.getState());
@@ -32,12 +29,12 @@ export default function RenderLevel() {
     return () => {
       levelState.destroy();
     };
-  }, [currentLevelId]);
+  }, []);
 
   if (!level) return null;
 
   const cameraTranslate = `translate3d(${level.cameraTransformX}, ${level.cameraTransformY},0)`;
-  console.log(level.showLevelList);
+
   return (
     <div
       className={styles.fullScreenContainer}
