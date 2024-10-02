@@ -71,7 +71,7 @@ export const DeathMessage = ({ level }) => {
     level.restart();
   };
 
-  useKeyPress("Enter", () => {
+  useKeyPress(["Enter"], () => {
     handleRestartLevel();
   });
 

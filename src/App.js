@@ -4,7 +4,7 @@ import { useRecoilState } from "recoil";
 import { spriteSheetImageAtom } from "./atoms/spriteSheetImageAtom";
 import soundsManager from "./classes/Sounds";
 import RenderGame from "./components/level-layout/RenderGame";
-
+import level from "./Levels/Level1";
 soundsManager.init();
 
 export default function App({ gameData }) {
@@ -20,5 +20,6 @@ export default function App({ gameData }) {
   }, [setSpriteSheetImage]);
 
   if (!spriteSheetImage) return null;
+  // return <RenderGame gameData={level} />;
   return <RenderGame gameData={gameData} />;
 }

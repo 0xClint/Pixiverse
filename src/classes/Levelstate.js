@@ -6,13 +6,14 @@ import { Inventory } from "./Inventory";
 import { LevelAnimatedFrames } from "./LevelAnimatedFrames";
 import { Camera } from "./Camera";
 import { Clock } from "./Clock";
+import { AnimalAnimatedFrames } from "./AnimalAnimatedFrames";
 
 export class LevelState {
   constructor(levelId, levelData, onEmit) {
     this.id = levelId;
     this.onEmit = onEmit;
     this.directionControls = new DirectionControls();
-    this.editModePlacementType = PLACEMENT_TYPE_WALL;
+    this.editModePlacementType = { type: PLACEMENT_TYPE_WALL, trait: null };
     this.levelData = levelData;
     //Start the level
     this.start();
@@ -37,6 +38,9 @@ export class LevelState {
 
     //Create fram animation manager
     this.animatedFrames = new LevelAnimatedFrames();
+
+    //Create fram animation manager
+    this.animalAnimatedFrames = new AnimalAnimatedFrames();
 
     //Cache a reference to the Hero
     this.heroRef = this.placements.find((p) => p.type == PLACEMENT_TYPE_HERO);
@@ -91,6 +95,14 @@ export class LevelState {
     );
   }
 
+  editTileHeight() {
+    this.tilesHeight = this.tilesHeight + 4;
+  }
+
+  editTileWidth() {
+    this.tilesWidth = this.tilesWidth + 4;
+  }
+
   getPlacementsData() {
     // Convert the Placements to type,x,y JSON
     this.gameLoop.stop();
@@ -102,8 +114,8 @@ export class LevelState {
     };
   }
 
-  setEditModePlacementType(newType) {
-    this.editModePlacementType = newType;
+  setEditModePlacementType(type, trait = null) {
+    this.editModePlacementType = { type, trait };
   }
 
   tick() {
@@ -119,6 +131,9 @@ export class LevelState {
 
     //Work on animation frames
     this.animatedFrames.tick();
+
+    //Work on animation frames
+    this.animalAnimatedFrames.tick();
 
     //Update the camera
     this.camera.tick();
@@ -190,6 +205,10 @@ export class LevelState {
       setEditModePlacementType: this.setEditModePlacementType.bind(this),
       copyPlacementsToClipboard: this.copyPlacementsToClipboard.bind(this),
       getPlacementsData: this.getPlacementsData.bind(this),
+      editTileHeight: this.editTileHeight.bind(this),
+      editTileWidth: this.editTileWidth.bind(this),
+      getTileWidth: this.tilesWidth,
+      getTileHeight: this.tilesHeight,
     };
   }
 

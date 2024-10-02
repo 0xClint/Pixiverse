@@ -14,7 +14,8 @@ export default function MapCell({ level, x, y, frameCoord }) {
           level.addPlacement({
             x: x,
             y: y,
-            type: level.editModePlacementType,
+            type: level.editModePlacementType.type,
+            trait: level.editModePlacementType.trait,
           });
         }
       }}

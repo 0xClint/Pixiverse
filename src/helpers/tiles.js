@@ -132,4 +132,42 @@ export const TILES = {
   CIABATTA_RIGHT: "17x4",
   CIABATTA_TELEPORT: "20x4",
   CIABATTA_BLAST: "6x3",
+
+  //House
+  // HOUSE: "0x19",
+  // HOUSE: "8x23",
+  HOUSE: "13x21",
+
+  //Plant
+  PLANT_1: "19x10",
+  PLANT_2: "20x10",
+  PLANT_3: "21x10",
+  PLANT_4: "18x10",
+  PLANT_5: "21x9",
+  PLANT_6: "20x9",
+  PLANT_7: "19x9",
+  PLANT_8: "18x9",
+
+  //NamePlate
+  NAME_PLATE_1: "13x16",
+  NAME_PLATE_2: "14x16",
+  NAME_PLATE_3: "15x16",
+  NAME_PLATE_4: "16x16",
+  NAME_PLATE_5: "17x15",
+  NAME_PLATE_6: "18x15",
+  NAME_PLATE_7: "19x15",
+  NAME_PLATE_8: "20x15",
+
+  // Animals
+  ANIMAL1_LEFT: ["17x19", "18x19", "19x19", "20x19"],
+  ANIMAL1_RIGHT: ["17x20", "18x20", "19x20", "20x20"],
+
+  ANIMAL2_LEFT: ["13x20", "14x20", "15x20", "16x20"],
+  ANIMAL2_RIGHT: ["13x19", "14x19", "15x19", "16x19"],
+
+  ANIMAL3_LEFT: ["18x14", "19x14", "20x14", "21x14"],
+  ANIMAL3_RIGHT: ["18x13", "19x13", "20x13", "21x13"],
+
+  ANIMAL4_LEFT: ["21x20", "22x20", "23x20", "24x20"],
+  ANIMAL4_RIGHT: ["21x19", "22x19", "23x19", "24x19"],
 };

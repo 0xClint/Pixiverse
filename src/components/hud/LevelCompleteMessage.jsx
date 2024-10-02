@@ -17,7 +17,7 @@ export default function LevelCompleteMessage() {
     setCurrentId(nextLevelId);
   };
 
-  useKeyPress("Enter", () => {
+  useKeyPress(["Enter"], () => {
     handleGoToNextLevel();
   });
   return (

@@ -1,34 +1,18 @@
-import { spriteSheetImageAtom } from "@/atoms/spriteSheetImageAtom";
-import {
-  PLACEMENT_TYPE_FIRE,
-  PLACEMENT_TYPE_ICE,
-  PLACEMENT_TYPE_SWITCH,
-  PLACEMENT_TYPE_SWITCH_DOOR,
-  PLACEMENT_TYPE_WALL,
-  PLACEMENT_TYPE_WATER,
-} from "@/helpers/consts";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EditorSprite from "@/components/object-graphics/EditorSprite";
-import { TILES } from "@/helpers/tiles";
-
-const tempData = [
-  {
-    id: 1,
-    name: "water",
-    frameCoord: TILES.WATER1,
-    value: PLACEMENT_TYPE_WATER,
-  },
-  { id: 2, name: "Fire", frameCoord: TILES.FIRE1, value: PLACEMENT_TYPE_FIRE },
-  { id: 3, name: "Wall", frameCoord: "6x2", value: PLACEMENT_TYPE_WALL },
-  { id: 4, name: "Ice", frameCoord: TILES.ICE, value: PLACEMENT_TYPE_ICE },
-];
+import { editorData } from "@/helpers/editorData";
+import { useGame } from "@/contexts/GameProvider";
+import { LockIcon } from "@/assets/Icons";
 
 const EditorDropdown = ({ level }) => {
   const [activeSprite, setActiveSprite] = useState(null);
+  const [activeTrait, setActiveTrait] = useState(null);
+  const { userLevels } = useGame();
 
-  const handleOnSelect = (value) => {
+  const handleOnSelect = (value, trait) => {
     setActiveSprite(value);
-    level.setEditModePlacementType(value);
+    setActiveTrait(trait);
+    level.setEditModePlacementType(value, trait);
   };
 
   if (!level.enableEditing) {
@@ -36,56 +20,37 @@ const EditorDropdown = ({ level }) => {
   }
 
   return (
-    <div className="absolute card-container right-2 flex gap-1">
-      <div className=" flex flex-col max-h-[400px] flex-wrap gap-1.5">
-        {tempData.map(({ id, name, frameCoord, value }) => {
-          return (
-            <div
-              key={id}
-              onClick={() => handleOnSelect(value)}
-              className={`p-[4px] border border-black rounded-sm ${
-                activeSprite == value
-                  ? " border-red-950 border-2"
-                  : "border-black"
-              }`}
-            >
-              <EditorSprite frameCoord={frameCoord} className="" />
-            </div>
-          );
+    <div className="absolute card-container right-2 flex flex-col gap-1">
+      <span className="scale-[0.5] text-[#694933] w-10">Editor</span>
+      <div className=" flex justify-center w-[80px]  max-h-[400px] flex-wrap gap-1.5">
+        {editorData.map(({ id, trait, frameCoord, levelCap, value }) => {
+          const isOpen = levelCap <= userLevels;
+          if (levelCap <= userLevels + 3)
+            return (
+              <div
+                key={id}
+                onClick={() => {
+                  if (isOpen) handleOnSelect(value, trait);
+                }}
+                className={`p-[4px] border border-black rounded-sm  ${
+                  !isOpen && "opacity-30"
+                }  ${
+                  activeSprite == value &&
+                  (trait == null ? true : trait == activeTrait)
+                    ? " border-red-950 border-2"
+                    : "border-black"
+                }`}
+              >
+                {!isOpen && (
+                  <span className="absolute h-3 w-3 text-black">
+                    <LockIcon />
+                  </span>
+                )}
+                <EditorSprite frameCoord={frameCoord} className="" />
+              </div>
+            );
         })}
       </div>
-
-      {/* <select
-        value={level.editModePlacementType}
-        onChange={(event) => {
-          level.setEditModePlacementType(event.target.value);
-        }}
-        className="bg-transparent text-white border-2 border-white rounded-md py-2 px-4"
-      >
-        <option value={PLACEMENT_TYPE_WALL} className="text-black">
-          Wall
-        </option>
-        <option value={PLACEMENT_TYPE_FIRE} className="text-black">
-          Fire
-        </option>
-        <option value={PLACEMENT_TYPE_WATER} className="text-black">
-          Water
-        </option>
-        <option value={PLACEMENT_TYPE_SWITCH} className="text-black">
-          Purple Switch
-        </option>
-        <option value={PLACEMENT_TYPE_SWITCH_DOOR} className="text-black">
-          Door
-        </option>
-      </select> */}
-      {/* <button
-        className="bg-transparent text-white border-2 border-white rounded-md py-2 px-4"
-        onClick={() => {
-          level.copyPlacementsToClipboard();
-        }}
-      >
-        Export
-      </button> */}
     </div>
   );
 };

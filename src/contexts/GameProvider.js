@@ -95,7 +95,7 @@ const GameProviderFn = () => {
 
   const SaveWorld = useCallback(
     async (currCid, gameData) => {
-      console.log(lands,account);
+      console.log(lands, account);
       const currGameState = findObjectByCid(lands, currCid);
       console.log(currGameState);
 
@@ -209,6 +209,7 @@ const GameProviderFn = () => {
         });
         console.log(res);
         setUserLevels(Number(res));
+        // setUserLevels(6);
       }
     } catch (error) {
       console.log(error);
@@ -234,6 +235,7 @@ const GameProviderFn = () => {
     createWorld,
     getAllLands,
     lands,
+    account,
     setLands,
     SaveWorld,
     userLevels,

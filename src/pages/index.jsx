@@ -8,7 +8,9 @@ import { useState } from "react";
 export default function Page() {
   const [landsModal, setLandsModal] = useState(false);
   const [newGameModal, setNewGameModal] = useState(false);
+  const { getAllLands, account } = useGame();
   const router = useRouter();
+  console.log(account);
   const handleExceute = async () => {
     console.log(level);
   };
@@ -50,7 +52,7 @@ export default function Page() {
                 Controls
               </button>
               <button
-                onClick={() => handleExceute()}
+                onClick={() => getAllLands()}
                 className="w-[300px] pixelated flex-center bg-secondary p-3 border-2 border-black rounded-md hover:scale-[102%]"
               >
                 Temp

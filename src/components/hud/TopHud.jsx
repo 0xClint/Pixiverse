@@ -11,18 +11,20 @@ const TopHud = ({ level, isLevelMode }) => {
   return loader ? (
     <Loader />
   ) : (
-    <div className="absolute top-1 left-0 right-0 flex justify-between items-center">
-      <div className="scale-[var(--pixel-size)] origin-top-left flex gap-1">
-        {isLevelMode && (
-          <>
+    <div className="absolute h-14 top-3 left-0 right-0 flex justify-between items-center mx-5">
+      <div className="scale-[2] origin-left">
+        <div>LOGO</div>
+      </div>
+      <div className="flex gap-1">
+        {isLevelMode ? (
+          <div className="origin-right flex gap-1 scale-[2]">
             <FlourCount level={level} />
             <ClockCount level={level} />
             <InventoryList level={level} />
-          </>
+          </div>
+        ) : (
+          <SaveGameData level={level} setLoader={setLoader} />
         )}
-      </div>
-      <div className="flex gap-1">
-        {!isLevelMode && <SaveGameData level={level} setLoader={setLoader} />}
       </div>
     </div>
   );

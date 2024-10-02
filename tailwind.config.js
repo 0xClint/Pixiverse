@@ -15,6 +15,9 @@ module.exports = {
       spacing: {
         pixelSize: "var(--pixel-size)", // Default value; you can change it as needed
       },
+      animation: {
+        fastPulse: "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite", // Faster pulse animation (0.75s)
+      },
     },
   },
   plugins: [],

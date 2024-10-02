@@ -35,6 +35,11 @@ export const DIRECTION_DOWN = "DOWN";
 
 export const DEATH_TYPE_CLOCK = "CLOCK";
 
+export const PLACEMENT_TYPE_HOUSE = "HOUSE";
+export const PLACEMENT_TYPE_PLANT = "PLANT";
+export const PLACEMENT_TYPE_PLATE = "PLATE";
+export const PLACEMENT_TYPE_ANIMAL = "ANIMAL";
+
 export const directionUpdateMap = {
   [DIRECTION_LEFT]: { x: -1, y: 0 },
   [DIRECTION_RIGHT]: { x: 1, y: 0 },
