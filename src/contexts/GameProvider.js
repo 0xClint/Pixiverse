@@ -24,9 +24,10 @@ import { uploadFile } from "@/utils/lighthouse";
 const GameProviderFn = () => {
   const { isAuthenticated, setAuthenticated } = useGameAuth();
   const [userDetails, setUserDetails] = useState(null);
+  const [userName, setUserName] = useState(null);
   const [lands, setLands] = useState(null);
   const [userLevels, setUserLevels] = useState(null);
-  const [gameLevels, setGameLevels] = useState(null);
+  const [gameLevels, setGameLevels] = useState([]);
   const [wallets, setWallets] = useState(null);
   const [account, setAccount] = useState("");
   const {
@@ -43,6 +44,7 @@ const GameProviderFn = () => {
       const details = await getUserDetails();
       console.log(details);
       setUserDetails(details);
+      setUserName(details.email.split("@")[0]);
     } catch (error) {
       console.log(error);
     }
@@ -93,15 +95,15 @@ const GameProviderFn = () => {
     [account]
   );
 
-  const SaveWorld = useCallback(
-    async (currCid, gameData) => {
-      console.log(lands, account);
+  const saveWorld = useCallback(
+    async (currCid, lands, gameData) => {
+      // console.log(lands, account);
       const currGameState = findObjectByCid(lands, currCid);
       console.log(currGameState);
 
       if (currGameState && account) {
         const newCid = await uploadFile(gameData);
-
+        console.log("new CID : " + newCid);
         const encodedTransferCall = encodeFunctionData({
           abi: WORLD_SPACE_CONTRACT_ABI,
           functionName: "setSpaceURI",
@@ -121,11 +123,47 @@ const GameProviderFn = () => {
         const response = await executeRawTransaction(requestData);
         console.log(response);
         await transactionListener(response.jobId);
+        await getAllLands();
+        return newCid;
       } else {
         console.log("Your are on wrong world url!");
+        return null;
       }
     },
-    [account, lands]
+    [account]
+  );
+
+  const saveLevelData = useCallback(
+    async (levelIndex) => {
+      console.log(account, levelIndex);
+      if (account) {
+        const encodedTransferCall = encodeFunctionData({
+          abi: WORLD_ITEM_CONTRACT_ABI,
+          functionName: "awardItem",
+          args: [account, levelIndex],
+        });
+
+        const requestData = {
+          network_name: "POLYGON_TESTNET_AMOY",
+          transaction: {
+            from: account,
+            to: WORLD_ITEMS_CONTRACT_ADDRESS,
+            data: encodedTransferCall,
+            value: "0x0",
+          },
+        };
+
+        const response = await executeRawTransaction(requestData);
+        console.log(response);
+        await transactionListener(response.jobId);
+        await getAllLands();
+        return newCid;
+      } else {
+        console.log("Your are on wrong world url!");
+        return null;
+      }
+    },
+    [account]
   );
 
   const transactionListener = (job_id) => {
@@ -226,20 +264,24 @@ const GameProviderFn = () => {
 
   useEffect(() => {
     getAllLands();
-  }, [isAuthenticated, setAuthenticated, account]);
+    console.log("all lands call!");
+  }, [isAuthenticated, setAuthenticated, account, saveWorld]);
 
   return {
     fetchUserDetails,
     fetchUserWallets,
+    userName,
+    userDetails,
     wallets,
     createWorld,
     getAllLands,
     lands,
     account,
     setLands,
-    SaveWorld,
+    saveWorld,
     userLevels,
     gameLevels,
+    saveLevelData,
   };
 };
 

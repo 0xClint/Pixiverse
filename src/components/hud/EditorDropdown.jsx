@@ -15,7 +15,7 @@ const EditorDropdown = ({ level }) => {
     level.setEditModePlacementType(value, trait);
   };
 
-  if (!level.enableEditing) {
+  if (!level.editorMode) {
     return null;
   }
 
@@ -50,6 +50,13 @@ const EditorDropdown = ({ level }) => {
               </div>
             );
         })}
+        <button
+          onClick={() => {
+            level.copyPlacementsToClipboard();
+          }}
+        >
+          Copy
+        </button>
       </div>
     </div>
   );

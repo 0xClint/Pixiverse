@@ -4,6 +4,7 @@ import {
   DIRECTION_RIGHT,
   DIRECTION_UP,
 } from "@/helpers/consts";
+import soundsManager, { SFX } from "./Sounds";
 
 export class DirectionControls {
   constructor() {
@@ -22,8 +23,8 @@ export class DirectionControls {
 
     this.directionKeyDownHandler = (e) => {
       const dir = this.directionKeys[e.key];
-
       if (dir && this.heldDirections.indexOf(dir) === -1) {
+        soundsManager.playSfx(SFX.RUN);
         this.heldDirections.unshift(dir);
       }
     };
@@ -39,7 +40,6 @@ export class DirectionControls {
     document.addEventListener("keydown", this.directionKeyDownHandler);
     document.addEventListener("keyup", this.directionKeyUpHandler);
   }
-
   get direction() {
     return this.heldDirections[0];
   }

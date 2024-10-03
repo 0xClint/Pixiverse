@@ -5,6 +5,7 @@ import Layout from "./Layout";
 import NewGameModal from "./NewGameModal";
 import Loader from "./Loader";
 import SaveGameData from "./SaveGameData";
+import ControlsModal from "./ControlsModal";
 
 export {
   Header,
@@ -14,4 +15,5 @@ export {
   NewGameModal,
   Loader,
   SaveGameData,
+  ControlsModal,
 };

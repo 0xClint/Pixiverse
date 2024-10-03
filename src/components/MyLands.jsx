@@ -19,6 +19,8 @@ const MyLands = ({ isOpen, setIsOpen }) => {
   }, []);
 
   if (!landsModal) return null;
+  console.log(lands);
+  console.log(lands ? "yes" : "no");
 
   return ReactDom.createPortal(
     <>
@@ -42,17 +44,21 @@ const MyLands = ({ isOpen, setIsOpen }) => {
             </span>
             <div className={"w-full h-full flex flex-col gap-y-4"}>
               <div className="w-full flex flex-col my-3 ">
-                {lands?.map(({ name, uri }) => {
-                  return (
-                    <div
-                      key={uri}
-                      onClick={() => router.push(`/land/${uri}`)}
-                      className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
-                    >
-                      {name}
-                    </div>
-                  );
-                })}
+                {lands?.length ? (
+                  lands.map(({ name, uri }) => {
+                    return (
+                      <div
+                        key={uri}
+                        onClick={() => router.push(`/land/${uri}`)}
+                        className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
+                      >
+                        {name}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <span className="text-center">No lands created</span>
+                )}
               </div>
             </div>
           </motion.div>

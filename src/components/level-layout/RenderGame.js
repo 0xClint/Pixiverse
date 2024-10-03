@@ -22,6 +22,11 @@ export default function RenderGame({ gameData }) {
     });
 
     //Get initial state
+    const check = router?.pathname.includes("/levels");
+    if (check) {
+      levelState.getState().setEditorMode(false);
+    }
+
     setLevel(levelState.getState());
 
     //Destroy method when this component unmounts or cleanup
@@ -45,16 +50,16 @@ export default function RenderGame({ gameData }) {
           <LevelPlacementsLayer level={level} />
         </div>
         {level.showLevelList && <LevelsList level={level} />}
-        {level.isCompleted && <LevelCompleteMessage />}
         {level.deathOutcome && <DeathMessage level={level} />}
       </div>
+      {level.isCompleted && <LevelCompleteMessage />}
       <TopHud
         level={level}
         isLevelMode={router?.pathname.includes("/levels")}
       />
-      {!router?.pathname.includes("/levels") && (
-        <EditorDropdown level={level} />
-      )}
+      {/* {!router?.pathname.includes("/levels") && ( */}
+      <EditorDropdown level={level} />
+      {/* )} */}
     </div>
   );
 }

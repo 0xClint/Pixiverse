@@ -138,6 +138,9 @@ export const TILES = {
   // HOUSE: "8x23",
   HOUSE: "13x21",
 
+  //Profile Picture
+  USER_PROFILE: "16x1",
+
   //Plant
   PLANT_1: "19x10",
   PLANT_2: "20x10",

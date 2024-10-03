@@ -2,20 +2,22 @@ import { useGame } from "@/contexts/GameProvider";
 import { landUpgradeCheck } from "@/helpers/editorData";
 import { useKeyPress } from "@/hooks/useKeyPress";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const SaveGameData = ({ level, setLoader }) => {
   const router = useRouter();
   const [canUpgrade, setUpgrade] = useState(false);
-  const { SaveWorld, userLevels } = useGame();
+  const { saveWorld, lands, userLevels } = useGame();
 
-  const handleSaveGame = async () => {
+  const handleSaveGame = useCallback(async () => {
     setLoader(true);
     const currentGameData = level.getPlacementsData();
     const currCid = router.query.id;
-    await SaveWorld(currCid, currentGameData);
+    console.log("currRoute : " + currCid);
+    const newCID = await saveWorld(currCid, lands, currentGameData);
     setLoader(false);
-  };
+    router.push(`/land/${newCID}`);
+  }, [router.query.id]);
 
   const handleUpgradeLand = () => {
     level.editTileHeight();
@@ -47,7 +49,7 @@ const SaveGameData = ({ level, setLoader }) => {
         </button>
       )}
       <button
-        onClick={handleSaveGame}
+        onClick={() => handleSaveGame()}
         className="bg-secondary text-[#8A664E] ease-in duration-100 hover:scale-105 border-2 border-black rounded-md py-2 px-4"
       >
         Save

@@ -24,7 +24,6 @@ const Levels = () => {
               </h2>
               <div className="w-full flex flex-col my-3 ">
                 {gameLevels?.map(({ itemURI }, index) => {
-                  console.log(itemURI, index);
                   return (
                     <button
                       key={itemURI}
@@ -34,7 +33,7 @@ const Levels = () => {
                     >
                       Level {index + 1}
                       {userLevels < index && (
-                        <LockIcon className="absolute right-1 top-2" />
+                        <LockIcon className="absolute right-1 top-2 h-5" />
                       )}
                     </button>
                   );

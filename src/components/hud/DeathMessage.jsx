@@ -12,6 +12,7 @@ import {
 } from "@/helpers/consts";
 import { TILES } from "@/helpers/tiles";
 import { useKeyPress } from "@/hooks/useKeyPress";
+import soundsManager, { SFX } from "@/classes/Sounds";
 
 const showDeathType = (deathType) => {
   switch (deathType) {
@@ -74,6 +75,8 @@ export const DeathMessage = ({ level }) => {
   useKeyPress(["Enter"], () => {
     handleRestartLevel();
   });
+
+  soundsManager.playSfx(SFX.LOSE);
 
   return (
     <div className={styles.outerContainer}>

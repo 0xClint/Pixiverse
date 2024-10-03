@@ -4,16 +4,21 @@ import { FlourCount } from "./FlourCount";
 import InventoryList from "./InventoryList";
 import { Loader, SaveGameData } from "..";
 import { useRouter } from "next/router";
-import EditorDropdown from "./EditorDropdown";
+import { PixiverseName } from "@/assets/Icons";
 
 const TopHud = ({ level, isLevelMode }) => {
   const [loader, setLoader] = useState(false);
+  const router = useRouter();
+
   return loader ? (
     <Loader />
   ) : (
     <div className="absolute h-14 top-3 left-0 right-0 flex justify-between items-center mx-5">
-      <div className="scale-[2] origin-left">
-        <div>LOGO</div>
+      <div
+        onClick={() => router.push("/")}
+        className="scale-[2] origin-left cursor-pointer hover:scale-[2.05] ease-in duration-100"
+      >
+        <PixiverseName className="h-6" />
       </div>
       <div className="flex gap-1">
         {isLevelMode ? (

@@ -12,3 +12,7 @@ export function convertWalletData(response) {
 export const findObjectByCid = (arr, targetUri) => {
   return arr.find((obj) => obj.uri === targetUri);
 };
+
+export const findIndexOf = (arr, targetURI) => {
+  return arr.findIndex((item) => item.itemURI === targetURI);
+};

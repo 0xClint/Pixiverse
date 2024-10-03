@@ -8,7 +8,7 @@ import { Loader } from ".";
 import { useRouter } from "next/router";
 
 const NewGameModal = ({ isOpen, setIsOpen }) => {
-  const { fetchUserDetails, createWorld, getAllLandsFunc } = useGame();
+  const { fetchUserDetails, createWorld, getAllLandsFunc, lands } = useGame();
   const [newGameModal, setNewGameModal] = useState(null);
   const [loader, setLoader] = useState(false);
   const [gameName, setGameName] = useState("");
@@ -55,7 +55,7 @@ const NewGameModal = ({ isOpen, setIsOpen }) => {
               X
             </span>
             <span className="font-inter font-regular text-lg text-center">
-              New Land
+              Create Land
             </span>
 
             <form
@@ -63,13 +63,32 @@ const NewGameModal = ({ isOpen, setIsOpen }) => {
               className="h-full flex flex-col justify-between flex-grow"
             >
               <div>
-                <label>Name</label>
-                <input
-                  className="w-full border-1 border-black p-2 mt-1 bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block "
-                  value={gameName}
-                  onChange={(e) => setGameName(e.target.value)}
-                  required
-                />
+                <div>
+                  <label>Name</label>
+                  <input
+                    className="w-full border-1 border-black p-2 mt-1 bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block "
+                    value={gameName}
+                    onChange={(e) => setGameName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mt-3">
+                  {lands?.length ? (
+                    lands.map(({ name, uri }) => {
+                      return (
+                        <div
+                          key={uri}
+                          onClick={() => router.push(`/land/${uri}`)}
+                          className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
+                        >
+                          {name}
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center w-full">No lands created</div>
+                  )}
+                </div>
               </div>
               <button
                 type="submit"

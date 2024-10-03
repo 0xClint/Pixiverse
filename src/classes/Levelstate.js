@@ -15,6 +15,7 @@ export class LevelState {
     this.directionControls = new DirectionControls();
     this.editModePlacementType = { type: PLACEMENT_TYPE_WALL, trait: null };
     this.levelData = levelData;
+    this.isEditorMode = true;
     //Start the level
     this.start();
   }
@@ -179,6 +180,10 @@ export class LevelState {
     this.gameLoop.stop();
   }
 
+  toggleEditorMode(arg) {
+    this.isEditorMode = arg;
+  }
+
   getState() {
     return {
       theme: this.theme,
@@ -198,7 +203,8 @@ export class LevelState {
       },
 
       //Edit mode API
-      enableEditing: true,
+      editorMode: this.isEditorMode,
+      setEditorMode: this.toggleEditorMode.bind(this),
       editModePlacementType: this.editModePlacementType,
       addPlacement: this.addPlacement.bind(this),
       deletePlacement: this.deletePlacement.bind(this),

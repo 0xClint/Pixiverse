@@ -2,10 +2,9 @@ import { useEffect } from "react";
 import { SPRITE_SHEET_SRC } from "./helpers/consts";
 import { useRecoilState } from "recoil";
 import { spriteSheetImageAtom } from "./atoms/spriteSheetImageAtom";
-import soundsManager from "./classes/Sounds";
 import RenderGame from "./components/level-layout/RenderGame";
 import level from "./Levels/Level1";
-soundsManager.init();
+
 
 export default function App({ gameData }) {
   const [spriteSheetImage, setSpriteSheetImage] =

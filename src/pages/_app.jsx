@@ -5,8 +5,18 @@ import { RecoilRoot } from "recoil";
 import { Layout } from "@/components";
 import { GameAuthProvider } from "@/contexts/GameAuthProvider";
 import { GameContextProvider } from "@/contexts/GameProvider";
+import soundsManager, { SFX } from "@/classes/Sounds";
+import { useEffect } from "react";
 
 export default function App({ Component, pageProps }) {
+  useEffect(() => {
+    soundsManager.init();
+    // soundsManager.playTheme();
+    // const initTheme = () => {
+    //   console.log("start");
+    // };
+    // initTheme();
+  }, []);
   return (
     <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
       <OktoProvider

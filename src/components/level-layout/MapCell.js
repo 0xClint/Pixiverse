@@ -10,7 +10,7 @@ export default function MapCell({ level, x, y, frameCoord }) {
         top: y * CELL_SIZE,
       }}
       onClick={() => {
-        if (level.enableEditing) {
+        if (level.editorMode) {
           level.addPlacement({
             x: x,
             y: y,
