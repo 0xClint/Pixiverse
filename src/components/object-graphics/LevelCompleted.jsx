@@ -10,10 +10,10 @@ const LevelCompleted = ({ handleGoToNextLevel }) => {
       </span>
       <div className=" flex justify-between">
         <button
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/levels")}
           className="w-[170px] border-2 border-tertiary text-sm hover:scale-[105%] text-white py-1  rounded text-center"
         >
-          Home
+          Levels
         </button>
         <button
           onClick={() => handleGoToNextLevel()}

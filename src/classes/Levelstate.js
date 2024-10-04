@@ -50,7 +50,7 @@ export class LevelState {
     this.camera = new Camera(this);
 
     //Create a Clock
-    this.clock = new Clock(100, this);
+    this.clock = new Clock(60, this);
 
     this.startGameLoop();
   }
@@ -140,7 +140,7 @@ export class LevelState {
     this.camera.tick();
 
     //Update the clock
-    // this.clock.tick();
+    this.clock.tick();
 
     // Emit any changes in React
     this.onEmit(this.getState());

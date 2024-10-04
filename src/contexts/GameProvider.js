@@ -157,10 +157,10 @@ const GameProviderFn = () => {
         console.log(response);
         await transactionListener(response.jobId);
         await getAllLands();
-        return newCid;
+    
       } else {
         console.log("Your are on wrong world url!");
-        return null;
+    
       }
     },
     [account]

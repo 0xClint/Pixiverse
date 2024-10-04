@@ -3,9 +3,9 @@ import { CELL_SIZE } from "@/helpers/consts";
 import React, { useEffect, useRef } from "react";
 import { useRecoilValue } from "recoil";
 
-function EditorSprite({ frameCoord, size = 16 }) {
+function EditorSprite({ frameCoord, size = 16, multipler = 1.5 }) {
   const spriteSheetImage = useRecoilValue(spriteSheetImageAtom);
-  const sizeT = size * 1.5;
+  const sizeT = size * multipler;
 
   const canvasRef = useRef();
 

@@ -1,6 +1,6 @@
 {
   "theme": "GRAY",
-  "tilesWidth": 8,
+  "tilesWidth": 9,
   "tilesHeight": 8,
   "placements": [
     { "type": "HERO", "x": 1, "y": 1 },

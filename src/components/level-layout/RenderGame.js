@@ -50,8 +50,8 @@ export default function RenderGame({ gameData }) {
           <LevelPlacementsLayer level={level} />
         </div>
         {level.showLevelList && <LevelsList level={level} />}
-        {level.deathOutcome && <DeathMessage level={level} />}
       </div>
+      {level.deathOutcome && <DeathMessage level={level} />}
       {level.isCompleted && <LevelCompleteMessage />}
       <TopHud
         level={level}
