@@ -91,12 +91,12 @@ const UserLoginModal = () => {
                 console.log("Login Failed", error);
               }}
               useOneTap
-              promptMomentNotification={(notification) =>
-                console.log("Prompt moment notification:", notification)
-              }
+              // promptMomentNotification={(notification) =>
+              //   console.log("Prompt moment notification:", notification)
+              // }
             />
           </div>
-          <button onClick={() => userAuthenticate()}>GEt deTIALS</button>
+          {/* <button onClick={() => userAuthenticate()}>GEt deTIALS</button> */}
         </motion.div>
       </div>
     )

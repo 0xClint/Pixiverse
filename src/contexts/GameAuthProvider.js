@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 const GameAuthProviderFn = () => {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
-  const { getUserDetails, getPortfolio, authenticate } = useOkto();
+  const { getUserDetails, getPortfolio, authenticate, logOut } = useOkto();
 
   const userAuthenticate = async () => {
     const idToken = localStorage.getItem("googleTokenId");
@@ -21,12 +21,20 @@ const GameAuthProviderFn = () => {
       }
     });
   };
+  const userLogout = async () => {
+    const idToken = localStorage.getItem("googleTokenId");
+    try {
+      await logOut();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     userAuthenticate();
   }, [setAuthenticated]);
 
-  return { isAuthenticated, setAuthenticated, userAuthenticate };
+  return { isAuthenticated, setAuthenticated, userAuthenticate, userLogout };
 };
 
 const GameAuthContext = createContext(null);

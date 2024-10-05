@@ -19,6 +19,6 @@ export default function App({ gameData }) {
   }, [setSpriteSheetImage]);
 
   if (!spriteSheetImage) return null;
-  return <RenderGame gameData={level} />;
-  // return <RenderGame gameData={gameData} />;
+  // return <RenderGame gameData={level} />;
+  return <RenderGame gameData={gameData} />;
 }
