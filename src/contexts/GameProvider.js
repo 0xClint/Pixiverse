@@ -264,7 +264,7 @@ const GameProviderFn = () => {
             Accept: "application/json",
           },
         });
-        console.log(response.data.nfts); // Return the response data
+        console.log(response.data.nfts); 
         const data = getContractByAddress(
           response.data.nfts,
           WORLD_SPACE_CONTRACT_ADDRESS
@@ -275,7 +275,7 @@ const GameProviderFn = () => {
       }
     } catch (error) {
       console.error("Error fetching NFTs:", error);
-      throw error; // Re-throw the error for further handling
+      throw error; 
     }
   };
 

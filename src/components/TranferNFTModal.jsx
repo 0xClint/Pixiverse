@@ -53,7 +53,7 @@ const TranferNFTModal = ({ isOpen, setIsOpen }) => {
               X
             </span>
             <span className="font-inter font-regular text-lg text-center">
-              Transfer NFT
+              Transfer Land NFT
             </span>
             <form
               onSubmit={handleTransferNFT}

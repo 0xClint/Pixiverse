@@ -1,4 +1,3 @@
-import App from "@/App";
 import soundsManager, { SFX } from "@/classes/Sounds";
 import {
   ControlsModal,
@@ -7,11 +6,6 @@ import {
   NewGameModal,
   TranferNFTModal,
 } from "@/components";
-import { useGame } from "@/contexts/GameProvider";
-import { WORLD_SPACE_CONTRACT_ADDRESS } from "@/contracts/conts";
-import { getContractByAddress } from "@/helpers/convertor";
-import level from "@/Levels/Level2";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -20,7 +14,6 @@ export default function Page() {
   const [newGameModal, setNewGameModal] = useState(false);
   const [controlModal, setControlModal] = useState(false);
   const [transferNFTModal, setTransferNFTModal] = useState(false);
-  const { getAllLands, account, fetchRawTransactionStatus } = useGame();
   const router = useRouter();
 
   const handleExceute = async () => {
@@ -84,12 +77,12 @@ export default function Page() {
               >
                 Controls
               </button>
-              <button
+              {/* <button
                 onClick={() => handleExceute()}
                 className="w-[300px] pixelated flex-center bg-secondary p-3 border-2 border-black rounded-md hover:scale-[102%] duration-100 ease-in"
               >
                 TEMP
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
