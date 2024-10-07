@@ -9,10 +9,59 @@ export function convertWalletData(response) {
   }, {});
 }
 
+export const shortenAddress = (address, length = 4) => {
+  if (!address || address?.length < length * 2 + 2) {
+    return "";
+  }
+
+  const start = address.slice(0, length);
+  const end = address.slice(-length);
+
+  return `${start}...${end}`;
+};
+
 export const findObjectByCid = (arr, targetUri) => {
   return arr.find((obj) => obj.uri === targetUri);
 };
 
 export const findIndexOf = (arr, targetURI) => {
   return arr.findIndex((item) => item.itemURI === targetURI);
+};
+
+export const getContractByAddress = (data, address) => {
+  return data
+    .filter((item) => item.contract.toLowerCase() === address.toLowerCase())
+    .map((obj) => {
+      return {
+        ...obj,
+        uri: replaceUri(obj.metadata_url),
+      };
+    });
+};
+
+export const replaceUri = (metadata) => {
+  if (!metadata) {
+    return null;
+  }
+
+  if (Array.isArray(metadata)) {
+    return metadata.map((obj) => {
+      if (obj.uri && obj.uri.includes("/")) {
+        const lastSegment = obj.uri.split("/").pop();
+        return {
+          ...obj,
+          uri: lastSegment,
+        };
+      } else {
+        return obj;
+      }
+    });
+  } else if (typeof metadata === "string") {
+    if (metadata.includes("/")) {
+      return metadata.split("/").pop();
+    } else {
+      return metadata;
+    }
+  }
+  return metadata;
 };

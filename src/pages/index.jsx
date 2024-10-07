@@ -1,8 +1,17 @@
 import App from "@/App";
 import soundsManager, { SFX } from "@/classes/Sounds";
-import { ControlsModal, Header, MyLands, NewGameModal } from "@/components";
+import {
+  ControlsModal,
+  Header,
+  MyLands,
+  NewGameModal,
+  TranferNFTModal,
+} from "@/components";
 import { useGame } from "@/contexts/GameProvider";
+import { WORLD_SPACE_CONTRACT_ADDRESS } from "@/contracts/conts";
+import { getContractByAddress } from "@/helpers/convertor";
 import level from "@/Levels/Level2";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -10,12 +19,14 @@ export default function Page() {
   const [landsModal, setLandsModal] = useState(false);
   const [newGameModal, setNewGameModal] = useState(false);
   const [controlModal, setControlModal] = useState(false);
-  const { getAllLands, account } = useGame();
+  const [transferNFTModal, setTransferNFTModal] = useState(false);
+  const { getAllLands, account, fetchRawTransactionStatus } = useGame();
   const router = useRouter();
-  console.log(account);
+
   const handleExceute = async () => {
-    console.log(level);
+    // await fetchRawTransactionStatus("c92ae682-ef40-4fa2-b922-b3e3cf8b4882");
   };
+
   return (
     <>
       <div className="">
@@ -27,7 +38,10 @@ export default function Page() {
           <Header />
           <MyLands isOpen={landsModal} setIsOpen={setLandsModal} />
           <NewGameModal isOpen={newGameModal} setIsOpen={setNewGameModal} />
-
+          <TranferNFTModal
+            isOpen={transferNFTModal}
+            setIsOpen={setTransferNFTModal}
+          />
           <ControlsModal isOpen={controlModal} setIsOpen={setControlModal} />
           {/* <div className="h-full flex-center justify-center flex-col"> */}
           <div className="relative h-full flex-center pb-10">
@@ -57,9 +71,12 @@ export default function Page() {
               >
                 Challenges
               </button>
-              {/* <button className="w-[300px] pixelated flex-center bg-secondary p-3 border-2 border-black rounded-md hover:scale-[102%]">
-                Settings
-                </button> */}
+              <button
+                onClick={() => setTransferNFTModal(true)}
+                className="w-[300px] pixelated flex-center bg-secondary p-3 border-2 border-black rounded-md hover:scale-[102%]"
+              >
+                Transfer
+              </button>
               <button
                 onClick={() => setControlModal(true)}
                 onMouseEnter={() => soundsManager.playSfx(SFX.MENU)}
@@ -67,7 +84,12 @@ export default function Page() {
               >
                 Controls
               </button>
-              {/* </div> */}
+              <button
+                onClick={() => handleExceute()}
+                className="w-[300px] pixelated flex-center bg-secondary p-3 border-2 border-black rounded-md hover:scale-[102%] duration-100 ease-in"
+              >
+                TEMP
+              </button>
             </div>
           </div>
         </div>

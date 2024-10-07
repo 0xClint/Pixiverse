@@ -6,9 +6,10 @@ import newLevel from "@/Levels/Lobby";
 import { uploadFile } from "@/utils/lighthouse";
 import { Loader } from ".";
 import { useRouter } from "next/router";
+import { LabelIcon } from "@/assets/Icons";
 
 const NewGameModal = ({ isOpen, setIsOpen }) => {
-  const { fetchUserDetails, createWorld, getAllLandsFunc, lands } = useGame();
+  const { createWorld, lands } = useGame();
   const [newGameModal, setNewGameModal] = useState(null);
   const [loader, setLoader] = useState(false);
   const [gameName, setGameName] = useState("");
@@ -22,7 +23,9 @@ const NewGameModal = ({ isOpen, setIsOpen }) => {
   const handleCreateLand = async (e) => {
     e.preventDefault();
     setLoader(true);
-    const cid = await uploadFile(newLevel);
+    const newLevelData = newLevel;
+    newLevelData.name = gameName;
+    const cid = await uploadFile(newLevelData);
     console.log(cid);
     await createWorld(gameName, cid);
     setLoader(false);
@@ -66,7 +69,7 @@ const NewGameModal = ({ isOpen, setIsOpen }) => {
                 <div>
                   <label>Name</label>
                   <input
-                    className="w-full border-1 border-black p-2 mt-1 bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block "
+                    className="w-full border-black p-2 mt-1 bg-gray-50 border  text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block "
                     value={gameName}
                     onChange={(e) => setGameName(e.target.value)}
                     required
@@ -75,15 +78,16 @@ const NewGameModal = ({ isOpen, setIsOpen }) => {
                 <div className="mt-3">
                   {lands?.length ? (
                     lands.map(({ name, uri }) => {
-                      return (
-                        <div
-                          key={uri}
-                          onClick={() => router.push(`/land/${uri}`)}
-                          className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
-                        >
-                          {name}
-                        </div>
-                      );
+                      if (uri != null)
+                        return (
+                          <div
+                            key={uri}
+                            onClick={() => router.push(`/land/${uri}`)}
+                            className="relative flex-center text-center hover:bg-[#e2995c] cursor-pointer rounded p-2"
+                          >
+                            {name}
+                          </div>
+                        );
                     })
                   ) : (
                     <div className="text-center w-full">No lands created</div>

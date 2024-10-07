@@ -7,7 +7,12 @@ import {
   useState,
 } from "react";
 import { useGameAuth } from "./GameAuthProvider";
-import { convertWalletData, findObjectByCid } from "@/helpers/convertor";
+import {
+  convertWalletData,
+  findObjectByCid,
+  getContractByAddress,
+  replaceUri,
+} from "@/helpers/convertor";
 import {
   GAME_CONTRACT_ABI,
   GAME_CONTRACT_ADDRESS,
@@ -20,6 +25,7 @@ import { encodeFunctionData } from "viem";
 import { publicClient } from "@/utils/viemConfig";
 import { INITIAL_SPACE_SIZE } from "@/helpers/consts";
 import { uploadFile } from "@/utils/lighthouse";
+import axios from "axios";
 
 const GameProviderFn = () => {
   const { isAuthenticated, setAuthenticated } = useGameAuth();
@@ -72,7 +78,11 @@ const GameProviderFn = () => {
       const encodedTransferCall = encodeFunctionData({
         abi: WORLD_SPACE_CONTRACT_ABI,
         functionName: "createSpace",
-        args: [name, INITIAL_SPACE_SIZE, cid],
+        args: [
+          name,
+          INITIAL_SPACE_SIZE,
+          `https://gateway.lighthouse.storage/ipfs/${cid}`,
+        ],
       });
       if (account) {
         const requestData = {
@@ -107,7 +117,10 @@ const GameProviderFn = () => {
         const encodedTransferCall = encodeFunctionData({
           abi: WORLD_SPACE_CONTRACT_ABI,
           functionName: "setSpaceURI",
-          args: [Number(currGameState.spaceId), newCid],
+          args: [
+            Number(currGameState.identifier),
+            `https://gateway.lighthouse.storage/ipfs/${newCid}`,
+          ],
         });
 
         const requestData = {
@@ -125,6 +138,39 @@ const GameProviderFn = () => {
         await transactionListener(response.jobId);
         await getAllLands();
         return newCid;
+      } else {
+        console.log("Your are on wrong world url!");
+        return null;
+      }
+    },
+    [account]
+  );
+
+  const transferNFT = useCallback(
+    async (to, tokenID) => {
+      console.log(account, to, tokenID);
+
+      if (account) {
+        const encodedTransferCall = encodeFunctionData({
+          abi: WORLD_SPACE_CONTRACT_ABI,
+          functionName: "transferFrom",
+          args: [account, to, tokenID],
+        });
+
+        const requestData = {
+          network_name: "POLYGON_TESTNET_AMOY",
+          transaction: {
+            from: account,
+            to: WORLD_SPACE_CONTRACT_ADDRESS,
+            data: encodedTransferCall,
+            value: "0x0",
+          },
+        };
+
+        const response = await executeRawTransaction(requestData);
+        console.log(response);
+        await transactionListener(response.jobId);
+        await getAllLands();
       } else {
         console.log("Your are on wrong world url!");
         return null;
@@ -157,10 +203,8 @@ const GameProviderFn = () => {
         console.log(response);
         await transactionListener(response.jobId);
         await getAllLands();
-    
       } else {
         console.log("Your are on wrong world url!");
-    
       }
     },
     [account]
@@ -196,6 +240,12 @@ const GameProviderFn = () => {
     });
   };
 
+  const fetchRawTransactionStatus = async (jobId) => {
+    const data = await getRawTransactionStatus({ order_id: jobId });
+
+    console.log(data.jobs[0]);
+  };
+
   useEffect(() => {
     fetchUserDetails();
   }, [isAuthenticated, setAuthenticated]);
@@ -208,18 +258,24 @@ const GameProviderFn = () => {
   const getAllLands = async () => {
     try {
       if (account) {
-        const res = await publicClient.readContract({
-          address: WORLD_SPACE_CONTRACT_ADDRESS,
-          abi: WORLD_SPACE_CONTRACT_ABI,
-          functionName: "getAllSpacesDetails",
-          args: [account],
+        const url = `https://testnets-api.opensea.io/api/v2/chain/amoy/account/${account}/nfts`;
+        const response = await axios.get(url, {
+          headers: {
+            Accept: "application/json",
+          },
         });
-        console.log("lands");
-        console.log(res);
-        setLands(res);
+        console.log(response.data.nfts); // Return the response data
+        const data = getContractByAddress(
+          response.data.nfts,
+          WORLD_SPACE_CONTRACT_ADDRESS
+        );
+        console.log(data);
+        setLands(data);
+        // console.log(addUriProperty(data));
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching NFTs:", error);
+      throw error; // Re-throw the error for further handling
     }
   };
 
@@ -282,6 +338,8 @@ const GameProviderFn = () => {
     userLevels,
     gameLevels,
     saveLevelData,
+    fetchRawTransactionStatus,
+    transferNFT,
   };
 };
 

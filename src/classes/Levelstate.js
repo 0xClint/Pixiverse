@@ -7,6 +7,11 @@ import { LevelAnimatedFrames } from "./LevelAnimatedFrames";
 import { Camera } from "./Camera";
 import { Clock } from "./Clock";
 import { AnimalAnimatedFrames } from "./AnimalAnimatedFrames";
+import {
+  NFT_ATTRIBUTES,
+  NFT_DESCRIPTION,
+  NFT_LAND_IMAGE,
+} from "@/helpers/NFTMetadata";
 
 export class LevelState {
   constructor(levelId, levelData, onEmit) {
@@ -18,6 +23,12 @@ export class LevelState {
     this.isEditorMode = true;
     //Start the level
     this.start();
+
+    //NFT MetaData
+    this.name = levelId;
+    this.attributes = NFT_ATTRIBUTES;
+    this.description = NFT_DESCRIPTION;
+    this.image = NFT_LAND_IMAGE;
   }
 
   start() {
@@ -50,6 +61,7 @@ export class LevelState {
     this.camera = new Camera(this);
 
     //Create a Clock
+
     this.clock = new Clock(60, this);
 
     this.startGameLoop();
@@ -108,6 +120,12 @@ export class LevelState {
     // Convert the Placements to type,x,y JSON
     this.gameLoop.stop();
     return {
+      //NFT Data
+      name: this.name,
+      description: this.description,
+      image: this.image,
+      attributes: this.attributes,
+
       theme: this.theme,
       tilesWidth: this.tilesWidth,
       tilesHeight: this.tilesHeight,
@@ -184,6 +202,10 @@ export class LevelState {
     this.isEditorMode = arg;
   }
 
+  turnOffClock() {
+    this.clock.stop();
+  }
+
   getState() {
     return {
       theme: this.theme,
@@ -213,6 +235,7 @@ export class LevelState {
       getPlacementsData: this.getPlacementsData.bind(this),
       editTileHeight: this.editTileHeight.bind(this),
       editTileWidth: this.editTileWidth.bind(this),
+      turnOffClock: this.turnOffClock.bind(this),
       getTileWidth: this.tilesWidth,
       getTileHeight: this.tilesHeight,
     };

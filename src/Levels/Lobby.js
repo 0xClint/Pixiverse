@@ -8,8 +8,17 @@ import {
   PLACEMENT_TYPE_TELEPORT,
   PLACEMENT_TYPE_WALL,
 } from "@/helpers/consts";
+import {
+  NFT_ATTRIBUTES,
+  NFT_DESCRIPTION,
+  NFT_LAND_IMAGE,
+} from "@/helpers/NFTMetadata";
 
 const level = {
+  description: NFT_DESCRIPTION,
+  attributes: NFT_ATTRIBUTES,
+  image: NFT_LAND_IMAGE,
+
   theme: LEVEL_THEMES.GREEN,
   tilesWidth: 9,
   tilesHeight: 8,

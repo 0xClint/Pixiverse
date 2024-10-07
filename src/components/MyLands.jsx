@@ -19,8 +19,6 @@ const MyLands = ({ isOpen, setIsOpen }) => {
   }, []);
 
   if (!landsModal) return null;
-  console.log(lands);
-  console.log(lands ? "yes" : "no");
 
   return ReactDom.createPortal(
     <>

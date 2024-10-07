@@ -17,14 +17,20 @@ export default function RenderGame({ gameData }) {
 
   useEffect(() => {
     //Create and subscribe to state change
-    const levelState = new LevelState("DemoID", gameData, (newState) => {
-      setLevel(newState);
-    });
+    const levelState = new LevelState(
+      gameData?.name || "DemoName",
+      gameData,
+      (newState) => {
+        setLevel(newState);
+      }
+    );
 
     //Get initial state
     const check = router?.pathname.includes("/levels");
     if (check) {
       levelState.getState().setEditorMode(false);
+    } else {
+      levelState.getState().turnOffClock();
     }
 
     setLevel(levelState.getState());
@@ -38,7 +44,6 @@ export default function RenderGame({ gameData }) {
   if (!level) return null;
 
   const cameraTranslate = `translate3d(${level.cameraTransformX}, ${level.cameraTransformY},0)`;
-
   return (
     <div
       className={styles.fullScreenContainer}

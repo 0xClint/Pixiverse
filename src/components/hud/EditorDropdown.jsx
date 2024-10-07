@@ -50,13 +50,13 @@ const EditorDropdown = ({ level }) => {
               </div>
             );
         })}
-        <button
+        {/* <button
           onClick={() => {
             level.copyPlacementsToClipboard();
           }}
         >
           Copy
-        </button>
+        </button> */}
       </div>
     </div>
   );

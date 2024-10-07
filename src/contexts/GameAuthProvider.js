@@ -21,13 +21,11 @@ const GameAuthProviderFn = () => {
       }
     });
   };
+
   const userLogout = async () => {
-    const idToken = localStorage.getItem("googleTokenId");
-    try {
-      await logOut();
-    } catch (error) {
-      console.error(error);
-    }
+    localStorage.clear();
+    logOut();
+    window.location.reload();
   };
 
   useEffect(() => {

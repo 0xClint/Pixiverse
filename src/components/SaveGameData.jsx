@@ -12,8 +12,10 @@ const SaveGameData = ({ level, setLoader }) => {
   const handleSaveGame = useCallback(async () => {
     setLoader(true);
     const currentGameData = level.getPlacementsData();
+    console.log(currentGameData);
     const currCid = router.query.id;
-    console.log("currRoute : " + currCid);
+    // console.log("currRoute : " + currCid);
+    // console.log(currCid, lands, currentGameData)
     const newCID = await saveWorld(currCid, lands, currentGameData);
     setLoader(false);
     router.push(`/land/${newCID}`);
