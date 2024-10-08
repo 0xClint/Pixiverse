@@ -22,6 +22,7 @@ const TranferNFTModal = ({ isOpen, setIsOpen }) => {
     } catch (error) {
       console.log(error);
     }
+    setIsOpen(false);
     setLoader(false);
   };
   const variants = {
