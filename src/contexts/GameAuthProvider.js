@@ -1,12 +1,9 @@
-import { userDetailsAtom } from "@/atoms/UserDataAtom";
 import { useOkto } from "okto-sdk-react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
 
 const GameAuthProviderFn = () => {
   const [isAuthenticated, setAuthenticated] = useState(false);
-  const [userDetails, setUserDetails] = useState(null);
-  const { getUserDetails, getPortfolio, authenticate, logOut } = useOkto();
+  const { authenticate, logOut } = useOkto();
 
   const userAuthenticate = async () => {
     const idToken = localStorage.getItem("googleTokenId");
