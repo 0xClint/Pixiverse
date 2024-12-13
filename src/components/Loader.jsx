@@ -1,4 +1,4 @@
-import Lottie from "react-lottie-player";
+// import Lottie from "react-lottie-player";
 import loader from "@/assets/loader.json";
 
 const Loader = () => {
@@ -7,8 +7,8 @@ const Loader = () => {
       className="fixed z-10 top-0 w-screen h-screen flex justify-center items-center"
       style={{ background: "rgba(223, 223, 223, 0.22)" }}
     >
-{/* LOADING */}
-      <Lottie
+LOADING
+      {/* <Lottie
         loop
         animationData={loader}
         play
@@ -17,7 +17,7 @@ const Loader = () => {
           height: 200,
           position: "absolute",
         }}
-      />
+      /> */}
     </div>
   );
 };
